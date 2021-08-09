@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tfg.look4pop.web.app.models.mapper.ITerritorioMapper">
+	
+	<!-- Select Territorio by id -->
+	<select id="getTerritorioById" parameterType="java.lang.String" resultType="Territorio">
+		SELECT * 
+		FROM territorio
+		WHERE idTerritorio = #{idTerritorio}
+	</select>
+	
+	<!-- Select Territorio Id BY Nivel y Ambito general -->
+	<select id="getTerritorioIdByNivelAndAmbitoGenLst" parameterType="map" resultType="java.lang.String">
+		SELECT distinct
+		
+		<choose>
+    		<when test='"AU".equals(params.ambitoGen)'>
+            	(AU) 
+    		</when>
+    		<when test='"C".equals(params.ambitoGen)'>
+            	(C) 
+    		</when>
+    		<when test='"E".equals(params.ambitoGen)'>
+            	(E) 
+    		</when>
+    		<when test='"I".equals(params.ambitoGen)'>
+            	(I) 
+    		</when>
+    		<when test='"M".equals(params.ambitoGen)'>
+            	(M) 
+    		</when>
+    		<when test='"P".equals(params.ambitoGen)'>
+            	(P) 
+    		</when>
+    		<when test='"PJ".equals(params.ambitoGen)'>
+            	(PJ) 
+    		</when>
+    		<when test='"R".equals(params.ambitoGen)'>
+            	(R) 
+    		</when>
+    		<when test='"ZC".equals(params.ambitoGen)'>
+            	(ZC) 
+    		</when>
+		</choose>
+		
+  		FROM territorio
+  		WHERE tipoTerritorio = #{params.nivel}
+  		
+  		<if test='( ("E".equals(params.nivel))
+  					and ("E".equals(params.ambitoGen)) )'>
+  			AND codigo_oficial = '00'
+  		</if>
+	
+	</select>
+	
+	<!-- Select Ambitos (Particular) -->
+	<select id="getTerritorioAmbitoParLst" parameterType="java.util.List" resultType="Territorio">
+		SELECT * 
+		FROM territorio
+		WHERE idTerritorio IN 
+			<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+				#{item}       
+			</foreach>
+	</select>
+	
+	<!-- Select Territorio Id Included in Ambito general -->
+	<select id="getTerritorioIdIncludedInAmbitoGenLst" parameterType="consultaFormDto" resultType="java.lang.Integer">
+		SELECT idTerritorio 
+		FROM territorio
+		WHERE tipoTerritorio = #{nivel}
+		AND 
+		<choose>
+    		<when test='"AU".equals(ambitoGen)'>
+            	(AU) 
+    		</when>
+    		<when test='"C".equals(ambitoGen)'>
+            	(C) 
+    		</when>
+    		<when test='"E".equals(ambitoGen)'>
+            	(E) 
+    		</when>
+    		<when test='"I".equals(ambitoGen)'>
+            	(I) 
+    		</when>
+    		<when test='"M".equals(ambitoGen)'>
+            	(M) 
+    		</when>
+    		<when test='"P".equals(ambitoGen)'>
+            	(P) 
+    		</when>
+    		<when test='"PJ".equals(ambitoGen)'>
+            	(PJ) 
+    		</when>
+    		<when test='"R".equals(ambitoGen)'>
+            	(R) 
+    		</when>
+    		<when test='"ZC".equals(ambitoGen)'>
+            	(ZC) 
+    		</when>
+		</choose>
+		IN
+		<foreach collection="ambitosPar" index="index" item="item" open="(" separator="," close=")">
+			#{item}       
+		</foreach>
+	</select>
+	
+</mapper>

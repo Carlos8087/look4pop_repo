@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+	<script type="text/javascript" th:fragment="javascript">
+	
+	$(document).ready(function() {
+		
+		// Formulario de consulta. Control de campos habilitados / deshabilitados 
+		
+		var nivel = dwr.util.getValue("selectNiveles");
+		var ambGen = dwr.util.getValue("selectAmbitosGen");
+		var tpFuente = dwr.util.getValue("selectTpsFuente");
+		
+		// Combo ambito general
+		if (nivel !== '-1') {
+			$('#selectAmbitosGen').prop('disabled', false);
+		} else {
+			$('#selectAmbitosGen').prop('disabled', true);
+		}
+		
+		// Combo ambitos particulares
+		if (ambGen !== '-1') {
+			$('#selectAmbitosPar').prop('disabled', false);
+		} else {
+			$('#selectAmbitosPar').prop('disabled', true);
+		}
+		
+		// Combo anios
+		if ( (tpFuente.includes('censoderecho'))
+				|| (tpFuente.includes('censohecho'))
+				|| (tpFuente.includes('padron')) ) {
+			$('#selectAnios').prop('disabled', false);
+		} else {
+			$('#selectAnios').prop('disabled', true);
+		}
+		
+		/*
+		
+		// Combo tipos de censo
+		if (document.getElementById("chkCenso").checked === true) {
+			$('#selectTpsCenso').prop('disabled', false);
+		} else {
+			$('#selectTpsCenso').prop('disabled', true);
+		}
+		
+		var tpsCenso = dwr.util.getValue("selectTpsCenso");
+		if (tpsCenso !== '') {
+			
+			// Combo años tipo de censo 'derecho'
+			if (tpsCenso.includes('derecho')) {
+				$('#selectCensoDerechoAnios').prop('disabled', false);
+			} else {
+				$('#selectCensoDerechoAnios').prop('disabled', true);
+			}
+			
+			// Combo años tipo de censo 'hecho'
+			if (tpsCenso.includes('hecho')) {
+				$('#selectCensoHechoAnios').prop('disabled', false);
+			} else {
+				$('#selectCensoHechoAnios').prop('disabled', true);
+			}
+		
+		}
+		
+		// Combo años padron
+		if (document.getElementById("chkPadron").checked === true) {
+			$('#selectPadronAnios').prop('disabled', false);
+		} else {
+			$('#selectPadronAnios').prop('disabled', true);
+		}
+		
+		*/
+		
+		// Literal por defecto cuando no hay nada seleccionado en los selectpicker
+		$(".selectpicker").selectpicker({
+	        noneSelectedText : '-------- Selec. --------'
+	    });
+		
+		// Refresco de los selectpicker
+		$(".selectpicker").selectpicker('refresh');
+		
+	});
+	
+	// Combo ambito general
+	function getAmbitoGenLst() {
+	 
+		var nivel = dwr.util.getValue("selectNiveles"); 
+		
+		var selectAmbGen = document.getElementById("selectAmbitosGen");
+		var selectAmbPar = document.getElementById("selectAmbitosPar");
+		
+		// COMBO AMBITOS (GENERAL) - Combo vacio, deshabilitado y opcion por defecto
+		dwr.util.removeAllOptions("selectAmbitosGen");
+		
+		$('#selectAmbitosGen').prop('disabled', true);
+		
+		var optPdGen = document.createElement("option");
+		optPdGen.textContent = '';
+		optPdGen.value = '-1';
+		selectAmbGen.appendChild(optPdGen);
+		
+		// Refresco del selectpicker
+		$('#selectAmbitosGen').selectpicker('refresh');
+		
+		// COMBO AMBITOS (PARTICULAR) - Combo vacio, deshabilitado y opcion por defecto
+		dwr.util.removeAllOptions("selectAmbitosPar");
+		
+		$('#selectAmbitosPar').prop('disabled', true);
+		
+		// Refresco del selectpicker
+		$('#selectAmbitosPar').selectpicker('refresh');
+		
+		if (nivel !== '-1') {
+			
+			consultaController.getTipoTerritorioAmbitoGenLst(nivel, {
+				callback:function(result) {
+		
+					if ( (result.length != null) && (result.length > 0) ) {
+						
+						for (var i = 0; i < result.length; i++) {
+							var opt = result[i];
+							var el = document.createElement("option");
+							el.textContent = opt.nombre;
+							el.value = opt.idTt;
+							selectAmbGen.appendChild(el);
+						}
+						
+						// Se habilita el select
+						$('#selectAmbitosGen').prop('disabled', false);
+						
+						// Refresco del selectpicker
+						$('#selectAmbitosGen').selectpicker('refresh');
+						
+					}
+					
+				}	
+			});
+			
+		}
+		
+	}
+	
+	
+	// Combo ambitos particulares
+	function getAmbitoParLst() {
+		 
+		var nivel = dwr.util.getValue("selectNiveles");
+		var ambitoGen = dwr.util.getValue("selectAmbitosGen");
+		
+		var selectAmbPar = document.getElementById("selectAmbitosPar");
+		
+		// COMBO AMBITOS (PARTICULAR) - Combo vacio, deshabilitado y opcion por defecto
+		dwr.util.removeAllOptions("selectAmbitosPar");
+		
+		$('#selectAmbitosPar').prop('disabled', true);
+		
+		// Refresco del selectpicker
+		$('#selectAmbitosPar').selectpicker('refresh');
+		
+		if ( (nivel !== '-1') 
+		     && (ambitoGen !== '-1') ) {
+			
+			consultaController.getTerritorioAmbitoParLst(nivel, ambitoGen, {
+				callback:function(result) {
+		
+					if ( (result.length != null) && (result.length > 0) ) {
+						
+						for (var i = 0; i < result.length; i++) {
+							var opt = result[i];
+							var el = document.createElement("option");
+							el.textContent = opt.nombreActual + ' [' + opt.codigoOficial + ']';
+							el.value = opt.idTerritorio;
+							selectAmbPar.appendChild(el);
+						}
+						
+						// Se habilita el select
+						$('#selectAmbitosPar').prop('disabled', false);
+						
+						// Refresco del selectpicker
+						$('#selectAmbitosPar').selectpicker('refresh');
+						
+					}
+					
+				}	
+			});
+			
+		}
+		
+	}
+	
+	// Combo anios
+	function getAnioLst() {
+		
+		// var locale = '[[${#locale}]]';
+		
+		var tpFuente = dwr.util.getValue("selectTpsFuente");
+		
+		var selectAnios = document.getElementById("selectAnios");
+		
+		// COMBO ANIOS - Combo vacio, deshabilitado y opcion por defecto
+		dwr.util.removeAllOptions("selectAnios");
+		
+		$('#selectAnios').prop('disabled', true);
+		
+		// Refresco del selectpicker
+		$('#selectAnios').selectpicker('refresh');
+		
+		if (tpFuente !== '') {
+			
+			if (tpFuente.includes('censoderecho')) {
+				
+				consultaController.getFuenteCensoByTipoLst('derecho', {
+					callback:function(result) {
+			
+						if ( (result.length != null) && (result.length > 0) ) {
+							
+							for (var i = 0; i < result.length; i++) {
+								var opt = result[i];
+								var el = document.createElement("option");
+								
+								/*
+								if (locale === "es_ES") {
+									el.textContent = opt.anio;
+								}
+								if (locale === "en_US") {
+									el.textContent = opt.anio;
+								}
+								*/
+									
+								el.textContent = opt.anio + ' - ' + '([[#{text.form.tipofuente.censo.derecho}]])';
+								el.value = 'd' + opt.anio;
+								selectAnios.appendChild(el);
+							}
+							
+							// Se habilita el select
+							$('#selectAnios').prop('disabled', false);
+							
+							// Refresco del selectpicker
+							$('#selectAnios').selectpicker('refresh');
+							
+						}
+						
+					}	
+				});
+				
+			}
+			
+			if (tpFuente.includes('censohecho')) {
+				
+				consultaController.getFuenteCensoByTipoLst('hecho', {
+					callback:function(result) {
+			
+						if ( (result.length != null) && (result.length > 0) ) {
+							
+							for (var i = 0; i < result.length; i++) {
+								var opt = result[i];
+								var el = document.createElement("option");
+								
+								/*
+								if (locale === "es_ES") {
+									el.textContent = opt.anio;
+								}
+								if (locale === "en_US") {
+									el.textContent = opt.anio;
+								}
+								*/
+									
+								el.textContent = opt.anio + ' - ' + '([[#{text.form.tipofuente.censo.hecho}]])';
+								el.value = 'h' + opt.anio;
+								selectAnios.appendChild(el);
+							}
+							
+							// Se habilita el select
+							$('#selectAnios').prop('disabled', false);
+							
+							// Refresco del selectpicker
+							$('#selectAnios').selectpicker('refresh');
+							
+						}
+						
+					}	
+				});
+				
+			}
+			
+			if (tpFuente.includes('padron')) {
+				
+				consultaController.getFuentePadronLst( {
+					callback:function(result) {
+			
+						if ( (result.length != null) && (result.length > 0) ) {
+							
+							for (var i = 0; i < result.length; i++) {
+								var opt = result[i];
+								var el = document.createElement("option");
+								
+								/*
+								if (locale === "es_ES") {
+									el.textContent = opt.anio;
+								}
+								if (locale === "en_US") {
+									el.textContent = opt.anio;
+								}
+								*/
+									
+								el.textContent = opt.anio + ' - ' + '([[#{text.form.tipofuente.padron}]])';
+								el.value = 'p' + opt.anio;
+								selectAnios.appendChild(el);
+							}
+							
+							// Se habilita el select
+							$('#selectAnios').prop('disabled', false);
+							
+							// Refresco del selectpicker
+							$('#selectAnios').selectpicker('refresh');
+							
+						}
+						
+					}	
+				});
+				
+			}
+			
+		}
+		
+	}
+	
+	// Limpiar formulario
+	function clearForm() {
+		
+		$('#selectNiveles').val('-1');
+		$('#selectNiveles').prop('disabled', false);
+		
+		$('#selectAmbitosGen').val('-1');
+		$('#selectAmbitosGen').prop('disabled', true);
+		
+		$('#selectAmbitosPar').val('');
+		$('#selectAmbitosPar').prop('disabled', true);
+		
+		$('#selectTpsFuente').val('');
+		$('#selectTpsFuente').prop('disabled', false);
+		
+		$('#selectAnios').val('');
+		$('#selectAnios').prop('disabled', true);
+		
+
+		// Refresco del selectpicker
+		$('#selectNiveles').selectpicker('refresh');
+		
+		// Refresco del selectpicker
+		$('#selectAmbitosGen').selectpicker('refresh');
+		
+		// Refresco del selectpicker
+		$('#selectAmbitosPar').selectpicker('refresh');
+		
+		// Refresco del selectpicker
+		$('#selectTpsFuente').selectpicker('refresh');
+		
+		// Refresco del selectpicker
+		$('#selectAnios').selectpicker('refresh');
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*
+	// Combo tipos de censo
+	function manageElementoTpsCenso() {
+		
+		var selectCenDerAni = document.getElementById("selectCensoDerechoAnios");
+		var selectCenHecAni = document.getElementById("selectCensoHechoAnios");
+		
+		if (document.getElementById("chkCenso").checked === true) {
+			$('#selectTpsCenso').prop('disabled', false);
+			
+			// Refresco del selectpicker
+			$('#selectTpsCenso').selectpicker('refresh');
+		} else {
+			$('#selectTpsCenso').prop('disabled', true);
+			$('#selectTpsCenso').val('');
+			
+			// COMBO FUENTES CENSOS (DERECHO) - Combo vacio, deshabilitado y opcion por defecto
+			dwr.util.removeAllOptions("selectCensoDerechoAnios");
+			
+			$('#selectCensoDerechoAnios').prop('disabled', true);
+			
+			// COMBO FUENTES CENSOS (HECHO)- Combo vacio, deshabilitado y opcion por defecto
+			dwr.util.removeAllOptions("selectCensoHechoAnios");
+			
+			$('#selectCensoHechoAnios').prop('disabled', true);
+			
+			// Refresco del selectpicker
+			$('#selectTpsCenso').selectpicker('refresh');
+			$('#selectCensoDerechoAnios').selectpicker('refresh');
+			$('#selectCensoHechoAnios').selectpicker('refresh');
+		}
+	}
+	*/
+	
+	/*
+	// Combos años segun tipo de censo
+	function getCensoAnioLst() {
+		 
+		var tpsCenso = dwr.util.getValue("selectTpsCenso");
+		
+		var selectCenDerAni = document.getElementById("selectCensoDerechoAnios");
+		var selectCenHecAni = document.getElementById("selectCensoHechoAnios");
+		
+		// COMBO FUENTES CENSOS (DERECHO) - Combo vacio, deshabilitado y opcion por defecto
+		dwr.util.removeAllOptions("selectCensoDerechoAnios");
+		
+		$('#selectCensoDerechoAnios').prop('disabled', true);
+		
+		// Refresco del selectpicker
+		$('#selectCensoDerechoAnios').selectpicker('refresh');
+		
+		// COMBO FUENTES CENSOS (HECHO)- Combo vacio, deshabilitado y opcion por defecto
+		dwr.util.removeAllOptions("selectCensoHechoAnios");
+		
+		$('#selectCensoHechoAnios').prop('disabled', true);
+		
+		// Refresco del selectpicker
+		$('#selectCensoHechoAnios').selectpicker('refresh');
+		
+		if (tpsCenso !== '') {
+			
+			if (tpsCenso.includes('derecho')) {
+				
+				consultaController.getFuenteCensoByTpCensoLst('derecho', {
+					callback:function(result) {
+			
+						if ( (result.length != null) && (result.length > 0) ) {
+							
+							for (var i = 0; i < result.length; i++) {
+								var opt = result[i];
+								var el = document.createElement("option");
+								el.textContent = opt.anio;
+								el.value = opt.anio;
+								selectCenDerAni.appendChild(el);
+							}
+							
+							// Se habilita el select
+							$('#selectCensoDerechoAnios').prop('disabled', false);
+							
+							// Refresco del selectpicker
+							$('#selectCensoDerechoAnios').selectpicker('refresh');
+							
+						}
+						
+					}	
+				});
+				
+				
+			}
+			
+			if (tpsCenso.includes('hecho')) {
+				
+				consultaController.getFuenteCensoByTpCensoLst('hecho', {
+					callback:function(result) {
+			
+						if ( (result.length != null) && (result.length > 0) ) {
+							
+							for (var i = 0; i < result.length; i++) {
+								var opt = result[i];
+								var el = document.createElement("option");
+								el.textContent = opt.anio;
+								el.value = opt.anio;
+								selectCenHecAni.appendChild(el);
+							}
+							
+							// Se habilita el select
+							$('#selectCensoHechoAnios').prop('disabled', false);
+							
+							// Refresco del selectpicker
+							$('#selectCensoHechoAnios').selectpicker('refresh');
+							
+						}
+						
+					}	
+				});
+				
+			}
+			
+		}
+		
+	}
+	*/
+	
+	/*
+	// Combo años padron
+	function getPadronAnioLst() {
+		 
+		var selectPadAni = document.getElementById("selectPadronAnios");
+		
+		// COMBO FUENTES PADRONES - Combo vacio, deshabilitado y opcion por defecto
+		dwr.util.removeAllOptions("selectPadronAnios");
+		
+		$('#selectPadronAnios').prop('disabled', true);
+		
+		// Refresco del selectpicker
+		$('#selectPadronAnios').selectpicker('refresh');
+		
+		if (document.getElementById("chkPadron").checked === true) {
+			
+			consultaController.getFuentePadronLst( {
+				callback:function(result) {
+		
+					if ( (result.length != null) && (result.length > 0) ) {
+						
+						for (var i = 0; i < result.length; i++) {
+							var opt = result[i];
+							var el = document.createElement("option");
+							el.textContent = opt.anio;
+							el.value = opt.anio;
+							selectPadAni.appendChild(el);
+						}
+						
+						// Se habilita el select
+						$('#selectPadronAnios').prop('disabled', false);
+						
+						// Refresco del selectpicker
+						$('#selectPadronAnios').selectpicker('refresh');
+						
+					}
+					
+				}	
+			});
+			
+		}
+		
+	}
+	*/
+	
+	/*
+	// Spinner
+	function displayLoader() {
+		document.getElementById("loader").style.display = "block";
+    }
+	*/
+	
+	</script>
+
+</body>
+
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+	<script type="text/javascript" th:fragment="javascript">
+	
+	$(document).ready(function() {
+		
+		// Refresco del selectpicker
+		$('#selectUsuarios').selectpicker('refresh');
+		
+		var idUsuarioSelect = dwr.util.getValue("selectUsuarios");
+		var tpAccion = dwr.util.getValue("tpAccion");
+		
+		var username = document.getElementById("username");
+		var password = document.getElementById("password");
+		var activado = document.getElementById("radio1");
+		var desactivado = document.getElementById("radio2");
+		
+		if ( (idUsuarioSelect === '-1') || (tpAccion === 'E') ) {
+			$('#username').prop('disabled', true);
+			$('#password').prop('disabled', true);
+			activado.disabled = true;
+			desactivado.disabled = true;
+			
+		} else {
+			$('#username').prop('disabled', false);
+			$('#password').prop('disabled', false);
+			activado.disabled = false;
+			desactivado.disabled = false;
+		}
+		
+		if (tpAccion === 'E') {
+			getUsuarios();
+		}
+		
+		// Literal por defecto cuando no hay nada seleccionado en los selectpicker
+		$(".selectpicker").selectpicker({
+	        noneSelectedText : '------- Selec. -------'
+	    });
+		
+		// Refresco de los selectpicker
+		$(".selectpicker").selectpicker('refresh');
+		
+	});
+	
+	// Mostrar detalle usuario
+	function getDetalleUsuario(accion) {
+	 
+		var idUsuarioSelect = dwr.util.getValue("selectUsuarios"); 
+		
+		var username = document.getElementById("username");
+		var password = document.getElementById("password");
+		var activado = document.getElementById("radio1");
+		var desactivado = document.getElementById("radio2");
+		
+		username.value = "";
+		password.value = "";
+		activado.checked = false;
+		desactivado.checked = false;
+		
+		$('#username').prop('disabled', true);
+		$('#password').prop('disabled', true);
+		activado.disabled = true;
+		desactivado.disabled = true;
+		
+		if (selectUsuarios !== '-1') {
+			
+			usuarioController.getUsuarioById(idUsuarioSelect, {
+				callback:function(result) {
+		
+					if (result != null) {
+						
+						username.value = result.username;
+						password.value = result.password;
+						
+						if (result.enabled == 1) {
+							activado.checked = true;
+							desactivado.checked = false;
+						} else {
+							activado.checked = false;
+							desactivado.checked = true;
+						}
+		
+						
+						if (accion === 'M') {
+							$('#username').prop('disabled', false);
+							$('#password').prop('disabled', false);
+							activado.disabled = false;
+							desactivado.disabled = false;
+						} else {
+							$('#username').prop('disabled', true);
+							$('#password').prop('disabled', true);
+							activado.disabled = true;
+							desactivado.disabled = true;
+						}
+					
+					}
+					
+				}	
+			});
+			
+		}
+	
+	}
+	
+	// Combo usuarios
+	function getUsuarios() {
+		 
+		var usuarios = document.getElementById("selectUsuarios");
+		
+		// COMBO USUARIOS - Combo vacio, deshabilitado y opcion por defecto
+		dwr.util.removeAllOptions("selectUsuarios");
+		
+		var elDef = document.createElement("option");
+		elDef.value = '-1';
+		usuarios.appendChild(elDef);
+		
+		$('#selectUsuarios').prop('disabled', true);
+		
+		// Refresco del selectpicker
+		$('#selectUsuarios').selectpicker('refresh');
+		
+		//if (document.getElementById("chkPadron").checked === true) {
+			
+			usuarioController.getUsuarios( {
+				callback:function(result) {
+		
+					if ( (result.length != null) && (result.length > 0) ) {
+						
+						for (var i = 0; i < result.length; i++) {
+							var opt = result[i];
+							var el = document.createElement("option");
+							el.textContent = opt.username + ' [' + opt.id + ']';
+							el.value = opt.id;
+							usuarios.appendChild(el);
+						}
+						
+						// Se habilita el select
+						$('#selectUsuarios').prop('disabled', false);
+						// Refresco del selectpicker
+						$('#selectUsuarios').selectpicker('refresh');
+						
+					}
+					
+				}	
+			});
+			
+		//}
+		
+	}
+	
+	$('#confirmUsuModificar').on('click', function(e) {
+		$('#modalUsuModificar').modal('show');
+		e.preventDefault();
+	});
+	
+	$('#confirmUsuEliminar').on('click', function(e) {
+		$('#modalUsuEliminar').modal('show');
+		e.preventDefault();
+	});
+	
+	</script>
+
+</body>
+
+</html>

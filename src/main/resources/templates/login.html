@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head th:replace="layout/layout :: head"></head>
+	<body>
+
+		<header th:replace="layout/layout :: header"></header>
+
+		<hr class="w-75">
+		
+		<div class="container">
+			<div class="row">
+				<div class="col-6 mb-3">
+					<a th:href="@{/index}"
+						class="btn btn-secondary btn-sm" th:utext="'&laquo; ' + #{text.boton.inicio}"></a>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col offset-1 mt-4">
+				<p class="text-justify" th:text="#{text.admin.login.intro}"></p>
+				</div>
+			</div>
+			<div class="row mt-3">
+				<div class="col-6 offset-3">
+					<small class="font-italic"><span class="text-danger font-weight-bold h6">(*) </span><label th:text="#{text.form.campo.obligatorio}"></label></small>
+				</div>
+			</div>
+			<div class="row mt-1 mb-4 justify-content-center">
+				<div class="col-6 mb-4">
+					<div class="mi-formulario card">
+						<div class="card-header" style="background: linear-gradient(90deg, rgba(120,168,226,1) 0%, rgba(248,249,250,1) 100%);">
+							<div class="row">
+								<div class="col my-2">
+									<!-- <p th:text="${tituloHeader}" class="font-weight-bold my-1 h6"></p> -->
+								</div>
+							</div>
+						 </div>
+						<div class="card-body bg-light">
+	
+							<form th:action="@{/login}" method="post">
+		
+								<div class="row">
+									<div class="form-group col-6">
+										<label for="username" th:utext="#{text.admin.form.etiq.username} + ' (*):'"></label>
+										<input type="text" name="username" id="username"
+											class="form-control" autofocus />
+										<!-- 'autofocus' -> Al cargar la pagina, automaticamente el cursor se va a posicionar sobre el input del username -->
+									</div>
+			
+									<div class="form-group col-6">
+										<label for="password" th:utext="#{text.admin.form.etiq.password} + ' (*):'"></label>
+											<input type="password" name="password" id="password"
+												class="form-control" autofocus />
+									</div>
+								</div>
+								<div class="row mt-4 justify-content-center">
+									<div class="form-group col-4">
+										<input type="submit" class="btn btn-secondary btn-md btn-block"
+											th:value="#{text.boton.login}" />
+									</div>
+								</div>
+							
+								<!-- Para incluir la validacion _csrf de forma manual (aunque Spring Security ya la incluye de forma automatica) -->
+								<!-- <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> -->
+		
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<footer th:replace="layout/layout :: footer"></footer>
+
+	</body>
+</html>

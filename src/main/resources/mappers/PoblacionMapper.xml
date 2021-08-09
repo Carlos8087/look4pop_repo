@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tfg.look4pop.web.app.models.mapper.IPoblacionMapper">
+	
+	<!-- Select Poblacion (Nivel 'Municipio') -->
+	<select id="getPoblacionByMunicipioLst" parameterType="consultaFormDto" resultType="poblacionDataDto">
+	SELECT 
+			tt.nombre AS tipoTerritorio,
+			te.nombre_actual AS nombre,
+			te.codigo_oficial AS codigoOficial,
+			<!-- tf.tipo AS tipoFuente,
+			IFNULL(tf.subtipo,'') AS subtipoFuente, -->
+			CONCAT(tf.tipo, ' ', IFNULL(tf.subtipo,'')) AS tipoFuente,
+			fu.año AS anio,
+			po.poblacion AS poblacion
+		FROM 
+			tipo_territorio tt, 
+			territorio te, 
+			tipo_fuente tf,
+			fuente fu,
+			poblacion po
+		WHERE 
+			tt.id_tt = te.tipoTerritorio
+		AND te.idTerritorio = po.idTerritorio
+		AND tf.tipo = fu.tipo
+		AND tf.subtipo = fu.subtipo
+		AND fu.tipo = po.tipo
+		AND fu.subtipo = po.subtipo
+		AND fu.año = po.año
+		
+		AND te.tipoTerritorio = #{nivel}
+		
+		<choose>
+    		<when test='"AU".equals(ambitoGen)'>
+            	AND te.AU in 
+    		</when>
+    		<when test='"C".equals(ambitoGen)'>
+            	AND te.C in 
+    		</when>
+    		<when test='"E".equals(ambitoGen)'>
+            	AND te.E in 
+    		</when>
+    		<when test='"I".equals(ambitoGen)'>
+            	AND te.I in 
+    		</when>
+    		<when test='"M".equals(ambitoGen)'>
+            	AND te.M in 
+    		</when>
+    		<when test='"P".equals(ambitoGen)'>
+            	AND te.P in 
+    		</when>
+    		<when test='"PJ".equals(ambitoGen)'>
+            	AND te.PJ in 
+    		</when>
+    		<when test='"R".equals(ambitoGen)'>
+            	AND te.R in 
+    		</when>
+    		<when test='"ZC".equals(ambitoGen)'>
+            	AND te.ZC in 
+    		</when>
+		</choose>
+		
+		<foreach collection="ambitosPar" index="index" item="item" open="(" separator="," close=")">
+			#{item}       
+		</foreach>
+		
+		AND (
+		
+		<if test='( (tpsFuente != null)
+  				or (!tpsFuente.isEmpty()) )'>
+  					
+  				<foreach collection="tpsFuente" index="indexTpsFuente" item="itemTpsFuente">
+						
+					<if test='"censoderecho".equals(itemTpsFuente)'>
+						(fu.tipo = 'censo' 
+						AND fu.subtipo = 'derecho'
+						AND fu.año in 
+						<foreach collection="censoDerAnios" index="index" item="item" open="(" separator="," close=")">
+							#{item}       
+						</foreach>
+						)
+					</if>
+					
+					<if test='"censohecho".equals(itemTpsFuente)'>
+						(fu.tipo = 'censo' 
+						AND fu.subtipo = 'hecho'
+						AND fu.año in 
+						<foreach collection="censoHecAnios" index="index" item="item" open="(" separator="," close=")">
+							#{item}       
+						</foreach>
+						)
+					</if>
+					
+					<if test='"padron".equals(itemTpsFuente)'>
+						(fu.tipo = 'padron' 
+						AND fu.año in 
+						<foreach collection="padronAnios" index="index" item="item" open="(" separator="," close=")">
+							#{item}       
+						</foreach>
+						)
+					</if>
+					
+					<if test="tpsFuente.length - 1 > indexTpsFuente">
+						OR
+					</if>
+					
+					
+					
+					
+					<!-- 
+					<if test='"censo".equals(itemTpsFuente)'>
+						
+						<foreach collection="tpsCenso" index="indexTpsCenso" item="itemTpsCenso">
+						
+							<if test='"derecho".equals(itemTpsCenso)'>
+								(fu.tipo = 'censo' 
+								AND fu.subtipo = 'derecho'
+								AND fu.año in 
+								<foreach collection="censoDerAnios" index="index" item="item" open="(" separator="," close=")">
+									#{item}       
+								</foreach>
+								)
+							</if>
+								
+							<if test='"hecho".equals(itemTpsCenso)'>
+								(fu.tipo = 'censo' 
+								AND fu.subtipo = 'hecho'
+								AND fu.año in 
+								<foreach collection="censoHecAnios" index="index" item="item" open="(" separator="," close=")">
+									#{item}       
+								</foreach>
+								)
+							</if>
+								
+							<if test="tpsCenso.length - 1 > indexTpsCenso">
+								OR
+							</if>
+								
+						</foreach>
+					</if>
+						
+					<if test='"padron".equals(itemTpsFuente)'>
+						(fu.tipo = 'padron' 
+						AND fu.año in 
+						<foreach collection="padronAnios" index="index" item="item" open="(" separator="," close=")">
+							#{item}       
+						</foreach>
+						)
+					</if>
+						
+					<if test="tpsFuente.length - 1 > indexTpsFuente">
+						OR
+					</if>
+					-->
+						
+				</foreach>
+  					
+  			</if>
+			
+		)
+		
+        <!-- LIMIT #{elementoIni}, #{numTotRegs} -->
+	
+	</select>
+	
+	<!-- Select Poblacion (Nivel distinto a 'Municipio') -->
+	<select id="getPoblacionLst" parameterType="consultaFormDto" resultType="poblacionDataDto">
+		
+		<foreach collection="idsTerritorioNivel" index="indexIdsTerritorioNivel" item="itemIdsTerritorioNivel">
+		
+			SELECT 
+				X.TIPOTE AS tipoTerritorio,
+				X.NOMBRE AS nombre,
+				X.CODOFICIAL AS codigoOficial,
+				<!-- Z.TIPO AS tipoFuente,
+				IFNULL(Z.SUBTIPO,'') AS subtipoFuente, -->
+				CONCAT(Z.TIPO, ' ', IFNULL(Z.SUBTIPO,'')) AS tipoFuente,
+				Z.ANIO AS anio,
+				Z.TOTAL_POB AS poblacion
+			FROM 
+				(SELECT 
+					tt.nombre AS TIPOTE,
+					te.nombre_actual AS NOMBRE,
+					te.codigo_oficial AS CODOFICIAL
+			 	FROM
+			 		tipo_territorio tt, 
+					territorio te
+			 	WHERE
+			 		tt.id_tt = te.tipoTerritorio
+			 	AND te.idTerritorio = #{itemIdsTerritorioNivel}
+				) X,
+				(SELECT
+					TIPO,
+					SUBTIPO,
+					AÑO AS ANIO,
+					SUM(poblacion) AS TOTAL_POB
+				FROM
+					poblacion
+				WHERE
+					idTerritorio IN (
+						SELECT
+							idTerritorio
+						FROM
+							territorio
+						WHERE
+							tipoTerritorio = 'M'
+							<choose>
+    							<when test='"AU".equals(nivel)'>
+					            	AND AU = #{itemIdsTerritorioNivel}
+					    		</when>
+					    		<when test='"C".equals(nivel)'>
+					            	AND C = #{itemIdsTerritorioNivel}
+					    		</when>
+					    		<when test='"E".equals(nivel)'>
+					            	AND E = #{itemIdsTerritorioNivel}
+					    		</when>
+					    		<when test='"I".equals(nivel)'>
+					            	AND I = #{itemIdsTerritorioNivel} 
+					    		</when>
+					    		<when test='"M".equals(nivel)'>
+					            	AND M = #{itemIdsTerritorioNivel} 
+					    		</when>
+					    		<when test='"P".equals(nivel)'>
+					            	AND P = #{itemIdsTerritorioNivel} 
+					    		</when>
+					    		<when test='"PJ".equals(nivel)'>
+					            	AND PJ = #{itemIdsTerritorioNivel} 
+					    		</when>
+					    		<when test='"R".equals(nivel)'>
+					            	AND R = #{itemIdsTerritorioNivel} 
+					    		</when>
+					    		<when test='"ZC".equals(nivel)'>
+					            	AND ZC = #{itemIdsTerritorioNivel} 
+					    		</when>
+							</choose>
+					)
+				
+				AND (
+		
+					<if test='( (tpsFuente != null)
+			  				or (!tpsFuente.isEmpty()) )'>
+			  					
+			  				<foreach collection="tpsFuente" index="indexTpsFuente" item="itemTpsFuente">
+									
+								<if test='"censoderecho".equals(itemTpsFuente)'>
+									(tipo = 'censo' 
+									AND subtipo = 'derecho'
+									AND año in 
+									<foreach collection="censoDerAnios" index="index" item="item" open="(" separator="," close=")">
+										#{item}       
+									</foreach>
+									)
+								</if>
+								
+								<if test='"censohecho".equals(itemTpsFuente)'>
+									(tipo = 'censo' 
+									AND subtipo = 'hecho'
+									AND año in 
+									<foreach collection="censoHecAnios" index="index" item="item" open="(" separator="," close=")">
+										#{item}       
+									</foreach>
+									)
+								</if>
+								
+								<if test='"padron".equals(itemTpsFuente)'>
+									(tipo = 'padron' 
+									AND año in 
+									<foreach collection="padronAnios" index="index" item="item" open="(" separator="," close=")">
+										#{item}       
+									</foreach>
+									)
+								</if>
+								
+								<if test="tpsFuente.length - 1 > indexTpsFuente">
+									OR
+								</if>
+								
+								
+								<!-- 
+								<if test='"censo".equals(itemTpsFuente)'>
+									
+									<foreach collection="tpsCenso" index="indexTpsCenso" item="itemTpsCenso">
+									
+										<if test='"derecho".equals(itemTpsCenso)'>
+											(tipo = 'censo' 
+											AND subtipo = 'derecho'
+											AND año in 
+											<foreach collection="censoDerAnios" index="index" item="item" open="(" separator="," close=")">
+												#{item}       
+											</foreach>
+											)
+										</if>
+											
+										<if test='"hecho".equals(itemTpsCenso)'>
+											(tipo = 'censo' 
+											AND subtipo = 'hecho'
+											AND año in 
+											<foreach collection="censoHecAnios" index="index" item="item" open="(" separator="," close=")">
+												#{item}       
+											</foreach>
+											)
+										</if>
+											
+										<if test="tpsCenso.length - 1 > indexTpsCenso">
+											OR
+										</if>
+											
+									</foreach>
+								</if>
+									
+								<if test='"padron".equals(itemTpsFuente)'>
+									(tipo = 'padron' 
+									AND año in 
+									<foreach collection="padronAnios" index="index" item="item" open="(" separator="," close=")">
+										#{item}       
+									</foreach>
+									)
+								</if>
+									
+								<if test="tpsFuente.length - 1 > indexTpsFuente">
+									OR
+								</if>
+								-->
+									
+							</foreach>
+			  					
+			  		</if>
+						
+				)
+				
+				GROUP BY TIPO, SUBTIPO, AÑO
+				) Z
+				
+			<if test="idsTerritorioNivel.length - 1 > indexIdsTerritorioNivel">
+				UNION
+			</if>
+							
+		</foreach>
+		
+		<!-- LIMIT #{elementoIni}, #{numTotRegs} -->			
+  		
+	</select>
+	
+</mapper>

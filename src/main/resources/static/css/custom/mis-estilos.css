@@ -1,0 +1,126 @@
+.page-item.active .page-link{
+    background-color: #78a8e2 !important;
+    border: 1px solid black;
+}
+/*
+.page-link {
+    color: black !important;
+    border: 1px solid black;
+}
+*/
+
+.page-item .page-link {
+	color: black !important;
+    border: 1px solid black;
+}
+.page-item.disabled {
+	color: black !important;
+}
+
+
+
+#example {
+  table-layout: fixed;
+  width: 100% !important;
+  border: 1px solid black;
+}
+
+
+/*
+#example td,
+#example th{
+  width: auto !important;
+  white-space: normal;
+}
+*/
+
+
+
+
+.navbar-nav > .active > a { 
+    background-color: red; 
+}
+
+.dropdown-item.active {
+	background-color: red;
+}
+
+
+.mi-formulario {
+  border: 2px solid #012264;
+}
+
+
+.bootstrap-select > .dropdown-toggle,
+.btn-light:not(:disabled):not(.disabled).active, 
+.btn-light:not(:disabled):not(.disabled):active, 
+.show > .btn-light.dropdown-toggle
+ {
+	border: 1px solid black;
+	background-color: #f0f5fc;
+	/*color: #9b9a9a;*/
+	color: black;
+}
+
+.dropdown-item.active {
+    background-color: #edeef0;
+    color: black;
+}
+
+
+.bs-searchbox .form-control {
+    margin-bottom: 0;
+    width: 100%;
+    float: none;
+    border: 1px solid black;
+}
+
+
+
+
+.bootstrap-select > .dropdown-toggle:hover {
+	border-width: 1px solid black;
+	background-color: #edeef0;
+	color: black;
+}
+
+.bootstrap-select.disabled,
+.bootstrap-select > .disabled {
+	border-width: 1px solid black;
+	background-color: #edeef0;
+	/*color: #9b9a9a;*/
+}
+
+.bootstrap-select > .dropdown-toggle.bs-placeholder,
+.bootstrap-select > .dropdown-toggle.bs-placeholder:focus,
+.bootstrap-select > .dropdown-toggle.bs-placeholder:hover,
+.bootstrap-select > .dropdown-toggle.bs-placeholder:active
+ {
+	border-width: 1px solid black;
+	background-color: #edeef0;
+	color: black;
+}
+
+
+.modal-header {
+	background-color: #f2f594;
+}
+.modal-body {
+	background-color: #fbfcd9;
+}
+
+
+
+
+.dropdown-menu {
+	background-color: #e5e5e5;
+	border: solid 2px red;
+}
+
+.dropdown-item:hover {
+	background-color: #fac5c5;
+}
+	
+	
+	
+

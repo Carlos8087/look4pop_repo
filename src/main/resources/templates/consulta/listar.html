@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layout/layout :: head"></head>
+
+<body>
+
+		<header th:replace="layout/layout :: header"></header>
+		
+		<hr class="w-75">
+
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					<a th:href="@{/consulta/form}"
+						class="btn btn-secondary btn-sm" th:utext="'&laquo; ' + #{text.boton.nuevaconsulta}"></a>
+				</div>
+			</div>
+		
+		<div class="row mt-4">
+			<div class="col offset-1">
+				<p class="text-justify" th:text="#{text.listar.intro}"></p>
+			</div>
+		</div>
+		
+		<div class="row mt-2 mb-4 justify-content-center">
+			<div class="col-9">
+				<div class="mi-formulario card">
+					
+					<div class="card-body bg-light">
+						<form action="">
+						
+							<div class="row justify-content-center">
+									<div class="col-auto">
+										<h6 class="mb-4 font-weight-bold font-italic h6" style="color: #012264;" th:text="#{text.listar.consulta.title}"></h6>
+									</div>
+							</div>
+						
+							<div class="row form-group">
+								<div class="col-3">
+									<div class="col">
+										<label for="nivel" th:text="#{text.listar.filtro.nivel}"></label>
+										<input type="text" class="form-control" placeholder="" name="nivel" id="nivel" th:value="${consultaFormDesc.nivelDesc}" readonly />
+									</div>
+								</div>	
+								<div class="col-3">
+									<div class="col">
+										<label for="ambGen" th:text="#{text.listar.filtro.ambito.gen}"></label>
+										<input type="text" class="form-control" placeholder="" name="ambGen" id="ambGen" th:value="${consultaFormDesc.ambitoGenDesc}" readonly />
+									</div>
+								</div>
+								<div class="col-6">
+									<div class="col">
+										<label for="ambPar" th:text="#{text.listar.filtro.ambito.par}"></label>
+										<textarea name="ambPar" id="ambPar" class="form-control" th:text="${consultaFormDesc.ambitosParDescFormat}" readonly>
+										</textarea>
+									</div>
+								</div>
+							</div>
+							<!-- 
+							<hr class="w-50">
+							-->
+							<!-- 
+							<div class="row form-group">
+								<div class="col-6">
+									<div class="col-7">
+										<label for="censo">Censo:</label>
+										<input type="text" class="form-control" placeholder="" name="censo" id="censo" readonly />
+									</div>
+								</div>
+								<div class="col-6">
+									<div class="col-7 mx-5">
+										<label for="padron">Padrón:</label>
+										<input type="text" class="form-control" placeholder="" name="padron" id="padron" readonly />
+									</div>
+								</div>
+							</div>
+							-->
+							<div class="row form-group">
+								<div class="col-4">
+									<div class="col-12">
+										<label for="cenDerAnios" th:text="#{text.listar.filtro.censo.der.anios}"></label>
+										<textarea name="cenDerAnios" id="cenDerAnios" class="form-control" th:text="${consultaFormDesc.censoDerAniosDescFormat}" readonly></textarea>
+									</div>
+								</div>
+								<div class="col-4">
+									<div class="col-12">
+										<label for="cenHecAnios" th:text="#{text.listar.filtro.censo.hec.anios}"></label>
+										<textarea name="cenHecAnios" id="cenHecAnios" class="form-control" th:text="${consultaFormDesc.censoHecAniosDescFormat}" readonly></textarea>
+									</div>
+								</div>
+								<div class="col-4">
+									<div class="col-12">
+										<label for="padAnios" th:text="#{text.listar.filtro.padron.anios}"></label>
+										<textarea name="padAnios" id="padAnios" class="form-control" th:text="${consultaFormDesc.padronAniosDescFormat}" readonly></textarea>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="mi-formulario card row mt-4 mb-4">
+			<!-- 
+			<div class="card-header" style="background: linear-gradient(90deg, rgba(120,168,226,1) 0%, rgba(248,249,250,1) 100%);">
+				<div class="row">
+					<div class="col my-2">
+						<!-- <p th:text="${tituloHeader}" class="font-weight-bold my-1 h6"></p> -->
+					<!-- 
+					</div>
+				</div>
+			</div>
+			-->
+			<div class="col card-body">
+			
+				<!-- 
+				<h4 class="card-title">
+					<a th:href="@{/consulta/form}"
+						class="btn btn-light btn-xs">&laquo; Volver</a> -->
+						
+					<div class="row justify-content-center">
+						<div class="col-auto">
+							<h6 class="mb-4 font-weight-bold font-italic h6" style="color: #012264;" th:text="#{text.listar.resultados.title}"></h6>
+						</div>
+					</div>
+					
+					<div class="row mb-3">
+						<div class="col-6">
+							<input type="hidden" id="regsActuales" th:value="${consultaForm.numElementAct}" />
+							<input type="hidden" id="regsTotales" th:value="${consultaForm.numTotRegs}" />
+							
+							
+							<a id="btnCargar">
+								<img th:src="@{/images/cargar.png}" style="width:33px; height:22px"/>
+								<span th:text="#{text.listar.masregistros}"></span>
+							</a>
+							
+							<!-- <a id="btnCargar" th:text="#{text.listar.masregistros}"></a> -->
+						</div>
+						<div class="col-6 text-right">
+							<!-- Link visualizacion PDF -->
+							<!-- <a th:href="@{'/consulta/listar'(format=pdf)}"
+								class="btn btn-danger btn-xs float-right mx-2">PDF</a> -->
+							
+						
+							<!-- 
+							<a th:href="@{'/consulta/listar'(format=pdf)}">
+								<img class="img-fluid float-right rounded mx-2"
+								th:src="@{/images/pdf.png}" th:alt="PDF" style="width:34px; height:42px"/>
+							</a>
+							-->
+							
+							<!-- Link visualizacion PDF -->
+							<form th:action="@{'/consulta/listar'(format=pdf)}" method="post">
+								<!-- <input type="hidden" name="desPepito" id="desPepito" /> -->
+								<input type="hidden" name="datos" id="datosPdf"/>
+								<input type="hidden" name="desPepito" id="desPepito"/>
+								<img class="img-fluid float-right rounded mx-2"
+									th:src="@{/images/pdf.png}" th:alt="PDF" style="width:34px; height:42px" onclick="parentNode.submit();" />
+							</form>
+				
+							<!-- Link visualizacion EXCEL -->
+							<!-- 
+							<a th:href="@{'/consulta/listar'(format=xlsx)}">
+								<img class="img-fluid float-right rounded mx-2"
+								th:src="@{/images/excel.png}" th:alt="EXCEL" style="width:35px; height:45px"/>
+							</a>
+							-->
+							
+							<!-- Link visualizacion EXCEL -->
+							<form th:action="@{'/consulta/listar'(format=xlsx)}" method="post">
+								<!-- <input type="hidden" name="desPepito" id="desPepito" /> -->
+								<input type="hidden" name="datos" id="datosXls"/>
+								<input type="hidden" name="desPepito" id="desPepito"/>
+								<img class="img-fluid float-right rounded mx-2"
+									th:src="@{/images/excel.png}" th:alt="EXCEL" style="width:35px; height:45px" onclick="parentNode.submit();" />
+							</form>
+							
+							
+							<!-- Link visualizacion CSV -->
+							<!-- 
+							<a th:href="@{'/consulta/listar'(format=csv)}">
+								<img class="img-fluid float-right rounded mx-2"
+								th:src="@{/images/csv.png}" th:alt="CSV" style="width:40px; height:40px"/>
+							</a>
+							-->
+							
+							<!-- Link visualizacion CSV -->
+							<form th:action="@{'/consulta/listar'(format=csv)}" method="post">
+								<!-- <input type="hidden" name="desPepito" id="desPepito" /> -->
+								<input type="hidden" name="datos" id="datosCsv"/>
+								<img class="img-fluid float-right rounded mx-2"
+									th:src="@{/images/csv.png}" th:alt="CSV" style="width:40px; height:42px" onclick="parentNode.submit();" />
+							</form>
+							
+							<!-- Link visualizacion XML -->
+							<!-- 
+							<a th:href="@{'/consulta/listar'(format=xml)}">
+								<img class="img-fluid float-right rounded mx-2"
+								th:src="@{/images/xml.png}" th:alt="XML" style="width:40px; height:41px"/>
+							</a>
+							-->
+							
+							<!-- Link visualizacion XML -->
+							<form th:action="@{'/consulta/listar'(format=xml)}" method="post">
+								<!-- <input type="hidden" name="desPepito" id="desPepito" /> -->
+								<input type="hidden" name="datos" id="datosXml"/>
+								<img class="img-fluid float-right rounded mx-2"
+									th:src="@{/images/xml.png}" th:alt="XML" style="width:40px; height:43px" onclick="parentNode.submit();" />
+							</form>
+							
+							<!-- Link visualizacion JSON -->
+							<!-- 
+							<a th:href="@{'/consulta/listar'(format=json)}">
+								<img class="img-fluid float-right rounded mx-2"
+								th:src="@{/images/json.png}" th:alt="JSON" style="width:40px; height:40px"/>
+							</a>
+							-->
+							
+							<!-- Link visualizacion JSON -->
+							<form th:action="@{'/consulta/listar'(format=json)}" method="post">
+								<!-- <input type="hidden" name="desPepito" id="desPepito" /> -->
+								<input type="hidden" name="datos" id="datosJson"/>
+								<img class="img-fluid float-right rounded mx-2"
+									th:src="@{/images/json.png}" th:alt="JSON" style="width:40px; height:42px" onclick="parentNode.submit();" />
+							</form>
+						</div>
+					</div>			
+					
+						
+	
+					<div class="row">
+						<div class="col mt-2">
+							<div class="table-responsive">
+							<table class="table table-striped table-bordered dt-responsive display nowrap" cellspacing="0" id="example">
+								<thead>
+									<tr>
+										<th th:text="#{text.listar.tabla.tipoTerritorio}"></th>
+										<th th:text="#{text.listar.tabla.nombre}"></th>
+										<th th:text="#{text.listar.tabla.codigoOficial}"></th>
+										<th th:text="#{text.listar.tabla.tipoFuente}"></th>
+										<!-- <th th:text="#{text.listar.tabla.subtipoFuente}"></th> -->
+										<th th:text="#{text.listar.tabla.anio}"></th>
+										<th th:text="#{text.listar.tabla.poblacion}"></th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="pda: ${poblacionData}">
+										<td th:text="${pda.tipoTerritorio}"></td>
+										<td th:text="${pda.nombre}"></td>
+										<td th:text="${pda.codigoOficial}"></td>
+										<td th:text="${pda.tipoFuente}"></td>
+										<!-- <td th:text="${pda.subtipoFuente}"></td> -->
+										<td th:text="${pda.anio}"></td>
+										<td th:text="${pda.poblacion}"></td>
+									</tr>
+								</tbody>
+								<tfoot>
+			            			<tr>
+										<th th:text="#{text.listar.tabla.tipoTerritorio}"></th>
+										<th th:text="#{text.listar.tabla.nombre}"></th>
+										<th th:text="#{text.listar.tabla.codigoOficial}"></th>
+										<th th:text="#{text.listar.tabla.tipoFuente}"></th>
+										<!-- <th th:text="#{text.listar.tabla.subtipoFuente}"></th> -->
+										<th th:text="#{text.listar.tabla.anio}"></th>
+										<th th:text="#{text.listar.tabla.poblacion}"></th>
+									</tr>
+			        			</tfoot>
+							</table>
+							</div>
+					
+							<input type="hidden" id="pagPrimera" th:value="#{text.listar.tablaresultados.paginacion.primera}" />
+							<input type="hidden" id="pagAnterior" th:value="#{text.listar.tablaresultados.paginacion.anterior}" />
+							<input type="hidden" id="pagSiguiente" th:value="#{text.listar.tablaresultados.paginacion.siguiente}" />
+							<input type="hidden" id="PagUltima" th:value="#{text.listar.tablaresultados.paginacion.ultima}" />
+							<input type="hidden" id="noResultados" th:value="#{text.listar.tablaresultados.noencontrado}" />
+				
+							<!-- <input type="text" name="desPepito" id="desPepito" th:value=${desPepito} />
+							
+							<input type="hidden" name="datos" id="datos"/> -->
+				
+				
+						</div>
+					</div>
+				
+					<div class="row">
+						<div class="col">
+					
+							<form th:action="@{/consulta/form}" th:object="${consultaForm}" method="post" id="formModifGuard">
+								
+								<input type="hidden" th:field="*{nivel}" />
+								<input type="hidden" th:field="*{ambitoGen}" />
+								<input type="hidden" th:field="*{ambitosPar}" />
+								<input type="hidden" th:field="*{tpsFuente}" />
+								
+								<input type="hidden" th:field="*{censoDerAnios}" />
+								<input type="hidden" th:field="*{censoHecAnios}" />
+								<input type="hidden" th:field="*{padronAnios}" />
+								
+								
+								<input type="hidden" name="descripcion" id="descripcion"/>
+								
+								
+								
+								
+								
+								
+								<div class="row">
+									<div class="col-3">
+										<button type="submit" class="btn btn-secondary" name="modificar">
+											<img th:src="@{/images/modificar.png}" style="width:22px; height:22px"/>&nbsp;
+											<span th:text="#{text.form.boton.modificar}"></span>
+										</button>
+									</div>
+									<div class="col-3">
+										<button type="submit" class="btn btn-secondary" name="confirmGuardar" id="confirmGuardar">
+											<img th:src="@{/images/guardar.png}" style="width:22px; height:22px"/>&nbsp;
+											<span th:text="#{text.form.boton.guardar}"></span>
+										</button> 
+									</div>
+								</div>
+								
+							</form>
+							
+						</div>
+					</div>
+					
+			</div>
+			
+		</div>
+		
+			<!-- Modal -->
+			<div class="modal fade" id="modalCargaRegs" tabindex="-1" role="dialog" aria-labelledby="modalCargaRegsAccionTitle" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+			    	<div class="modal-content"> 
+			      		<div class="modal-header">
+			        		<h5 class="modal-title" id="modalCargaRegsLongTitle" th:text="#{text.confirm.accion}"></h5>
+			        		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          			<span aria-hidden="true">&times;</span>
+			        		</button>
+			      		</div>
+			      		<div class="modal-body">
+			        		<span th:text="#{text.confirm.load.regs}"></span>
+			      		</div>
+			      		<div class="modal-footer">
+			        		<button type="button" class="btn btn-danger" data-dismiss="modal" th:text="#{text.confirm.no}"></button>
+			        		<a class="btn btn-success" th:text="#{text.confirm.si}" th:href="@{/consulta/cargar}"></a>
+			      		</div>
+			    	</div>
+			 	</div>
+			</div>
+			
+			<!-- Modal -->
+			<div class="modal fade" id="modalGuardaForm" tabindex="-1" role="dialog" aria-labelledby="modalGuardaFormAccionTitle" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+			    	<div class="modal-content"> 
+			      		<div class="modal-header" style="background-color: #5a6268; color: white;">
+			        		<h5 class="modal-title" id="modalGuardaFormLongTitle" th:text="#{text.confirm.descripcion}"></h5>
+			        		<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white;">
+			          			<span aria-hidden="true">&times;</span>
+			        		</button>
+			      		</div>
+			      		<div class="modal-body" style="background-color: #f0efef;">
+			        		<label for="mensajedesc" class="col-form-label" th:text="#{text.confirm.guardar.descripcion}"></label>
+            				<textarea id="mensajedesc" class="form-control"></textarea>
+			      		</div>
+			      		<div class="modal-footer">
+			        		<!-- <button type="button" class="btn btn-danger" data-dismiss="modal" th:text="#{text.confirm.no}"></button> -->
+			        		<button type="submit" form="formModifGuard" class="btn btn-success" id="guardar" name="guardar" th:text="#{text.confirm.guardar}"></button>
+			      		</div>
+			    	</div>
+			 	</div>
+			</div>
+
+	</div>
+
+	<footer th:replace="layout/layout :: footer"></footer>
+	<script th:replace="utils/js/tablaresultados-search :: javascript"></script>
+
+</body>
+</html>

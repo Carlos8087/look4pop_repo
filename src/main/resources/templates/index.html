@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	
+	<head th:replace="layout/layout :: head"></head>
+	
+	<body>
+
+		<header th:replace="layout/layout :: header"></header>
+		
+		<hr class="w-75">
+
+		<div class="container">
+
+			<div class="row">
+				<div class="col-12 mt-3 mb-3 text-center">
+					<div class="carousel slide" id="carouselPob" data-ride="carousel">
+						<ol class="carousel-indicators">
+							<li data-target="#carouselPob" data-slide-to="0" class="active"></li>
+							<li data-target="#carouselPob" data-slide-to="1"></li>
+							<li data-target="#carouselPob" data-slide-to="2"></li>
+							<li data-target="#carouselPob" data-slide-to="3"></li>
+							<li data-target="#carouselPob" data-slide-to="4"></li>
+							<li data-target="#carouselPob" data-slide-to="5"></li>
+						</ol>
+						<div class="carousel-inner">
+							<div class="carousel-item active">
+								<img src="/images/carousel/1.jpg" alt="">
+								<div class="carousel-caption d-block">
+									<h4>Villanueva de Bogas</h4>
+									<p>(Toledo)</p>
+								</div>
+							</div>
+							<div class="carousel-item">
+								<img src="/images/carousel/2.jpg" alt="">
+								<div class="carousel-caption d-block">
+									<h4>Oviedo</h4>
+									<p>(Asturias)</p>
+								</div>
+							</div>
+							<div class="carousel-item">
+								<img src="/images/carousel/3.jpg" alt="">
+								<div class="carousel-caption d-block">
+									<h4>Cazorla</h4>
+									<p>(Jaén)</p>
+								</div>
+							</div>
+							<div class="carousel-item">
+								<img src="/images/carousel/4.jpg" alt="">
+								<div class="carousel-caption d-block">
+									<h4>Consuegra</h4>
+									<p>(Toledo)</p>
+								</div>
+							</div>
+							<div class="carousel-item">
+								<img src="/images/carousel/5.jpg" alt="">
+								<div class="carousel-caption d-block">
+									<h4>Benidorm</h4>
+									<p>(Alicante)</p>
+								</div>
+							</div>
+							<div class="carousel-item">
+								<img src="/images/carousel/6.jpg" alt="">
+								<div class="carousel-caption d-block">
+									<h4>Madrid</h4>
+									<p>(Madrid)</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row mt-4">
+				<div class="col">
+					<p class="h5 text-center text-justify" th:text="#{text.home.bienvenido.title}"></p>
+					<p class="text-center text-justify" th:text="#{text.home.bienvenido.desc}"></p><br/><br/>
+					
+					<p class="font-weight-bold text-justify" th:text="#{text.home.func.principal.title}"></p>
+					<p class="text-justify" th:text="#{text.home.func.principal.desc.1}"></p>
+					<p class="text-justify" th:text="#{text.home.func.principal.desc.2}"></p>
+					<p class="text-justify" th:text="#{text.home.func.principal.desc.3}"></p>
+					<p class="text-justify" th:text="#{text.home.func.principal.desc.4}"></p>
+					<p class="text-justify" th:text="#{text.home.func.principal.desc.5}"></p>
+					<p class="text-justify" th:text="#{text.home.func.principal.desc.6}"></p>
+					<p class="text-justify" th:text="#{text.home.func.principal.desc.7}"></p>
+					<p class="text-justify" th:text="#{text.home.func.principal.desc.8}"></p><br/><br/>
+					
+					<p class="font-weight-bold text-justify" th:text="#{text.home.admin.title}"></p>
+					<p class="text-justify" th:text="#{text.home.admin.desc}"></p>
+					<p class="text-justify">
+						<label class="font-italic" style="text-decoration: underline;" th:text="#{text.home.admin.acciones.title.1}"></label><br/><label th:text="#{text.home.admin.acciones.desc.1}"></label><br/>
+						<label class="font-italic" style="text-decoration: underline;" th:text="#{text.home.admin.acciones.title.2}"></label><br/><label th:text="#{text.home.admin.acciones.desc.2}"></label><br/>
+						<label class="font-italic" style="text-decoration: underline;" th:text="#{text.home.admin.acciones.title.3}"></label><br/><label th:text="#{text.home.admin.acciones.desc.3}"></label>
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<footer th:replace="layout/layout :: footer"></footer>
+
+	</body>
+</html>

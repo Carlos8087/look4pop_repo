@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head th:replace="layout/layout :: head"></head>
+
+	<body>
+	
+		<header th:replace="layout/layout :: header"></header>
+
+		<hr class="w-75">
+		
+		<div class="container mb-4">
+			<div class="row">
+				<div class="col-6 mb-3">
+					<a th:href="@{/admin/usuarios}"
+						class="btn btn-secondary btn-sm" th:utext="'&laquo; ' + #{text.boton.volver.usuarios}"></a>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col offset-1 mt-4">
+					<p class="text-justify" th:text="#{text.admin.usuarios.acciones.alta.intro}"></p>
+				</div>
+			</div>
+			<div class="row mt-3">
+				<div class="col-6 offset-2">
+					<small class="font-italic"><span class="text-danger font-weight-bold h6">(*) </span><label th:text="#{text.form.campo.obligatorio}"></label></small>
+				</div>
+			</div>
+			<div class="row mt-1 mb-4 justify-content-center">
+				<div class="col-8 mb-4">
+					<div class="mi-formulario card">
+						<div class="card-header" style="background: linear-gradient(90deg, rgba(120,168,226,1) 0%, rgba(248,249,250,1) 100%);">
+							<div class="row">
+								<div class="col my-2">
+									<!-- <p th:text="${tituloHeader}" class="font-weight-bold my-1 h6"></p> -->
+								</div>
+							</div>
+						 </div>
+						<div class="card-body bg-light">
+						
+						
+						<!-- Para mostrar todos los errores de validacion juntos -->
+						<div th:object="${usuarioForm}" th:remove="tag">
+							<!-- remove 'tag' -> para que no aparezca el contenedor en el HTML -->
+							<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+								<li th:each="err: ${#fields.errors('*')}" th:text="${err}"></li>
+							</ul>
+						</div>
+				
+						<form th:action="@{/admin/usuarios/alta/form}" th:object="${usuarioForm}" method="post" id="formUsuAlta">
+								
+							<input type="hidden" th:value="A" name="tpAccion" id="tpAccion"/>
+								
+								<div class="row mt-4">
+									<div class="form-group col-6">
+										<label for="username" th:utext="#{text.admin.form.etiq.username} + ' (*):'"></label>
+										<div class="col-12">
+											<input type="text" th:maxlength="45" th:field="*{username}" class="form-control" name="usuario" id="usuario" />
+											<small th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="form-text text-danger"></small>
+										</div>
+										<small class="form-text text-muted font-italic" th:text="#{text.admin.form.desc.username}"></small>
+									</div>
+									
+									<div class="form-group col-6">
+										<label for="password" th:utext="#{text.admin.form.etiq.password} + ' (*):'"></label>
+										<div class="col-12">
+											<input type="text" th:maxlength="15" th:field="*{password}" class="form-control" name="password" id="password" />
+											<small th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="form-text text-danger"></small>
+										</div>
+										<small class="form-text text-muted font-italic" th:text="#{text.admin.form.desc.password}"></small>
+									</div>
+								</div>
+								
+								<div class="row mt-4 justify-content-center">
+									<div class="form-group col-3">
+										<input type="submit" name="confirmUsuAlta" id="confirmUsuAlta" th:value="#{text.boton.crear}"
+												class="btn btn-secondary btn-md btn-block" style="text-align: center;"/>
+									</div>
+								</div>
+
+							</form>
+						</div>	
+					</div>
+				</div>
+			</div>
+			
+			<!-- Modal -->
+			<div class="modal fade" id="modalUsuAlta" tabindex="-1" role="dialog" aria-labelledby="modalUsuAltaAccionTitle" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+			    	<div class="modal-content">
+			      		<div class="modal-header">
+			        		<h5 class="modal-title" id="modalUsuAltaLongTitle" th:text="#{text.confirm.accion}"></h5>
+			        		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          			<span aria-hidden="true">&times;</span>
+			        		</button>
+			      		</div>
+			      		<div class="modal-body">
+			        		<span th:text="#{text.confirm.usuario.alta}"></span>
+			      		</div>
+			      		<div class="modal-footer">
+			        		<button type="button" class="btn btn-danger" data-dismiss="modal" th:text="#{text.confirm.no}"></button>
+			        		<button type="submit" form="formUsuAlta" class="btn btn-success" name="alta" id="alta" th:text="#{text.confirm.si}"></button>
+			      		</div>
+			    	</div>
+			 	</div>
+			</div>
+		</div>
+		
+		<footer th:replace="layout/layout :: footer"></footer>
+		<script th:replace="utils/js/admin/gestionar-alta-usuarios :: javascript"></script>
+
+	</body>
+</html>

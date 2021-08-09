@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+	<script type="text/javascript" th:fragment="javascript">
+		$(document).ready(function() {
+			
+			
+			
+			
+			
+			    // Setup - add a text input to each footer cell
+			    $('#example thead tr').clone(true).appendTo( '#example thead' );
+			    
+			    $('#example thead tr:eq(1) th').each( function (i) {
+			        var title = $(this).text();
+			        $(this).html( '<input type="text" placeholder="Search..." style="width: 100%; float: right;" />' );
+			 
+			        $( 'input', this ).on( 'keyup change', function () {
+			            if ( table.column(i).search() !== this.value ) {
+			                table
+			                    .column(i)
+			                    .search( this.value )
+			                    .draw();
+			            }
+			        } );
+			    } );
+			 
+
+			    
+		
+			
+			
+			
+			
+			
+			
+			
+			// Setup - add a text input to each footer cell
+		    /*
+			$('#example tfoot th').each( function () {
+		        var title = $(this).text();
+		        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+		    } );
+			*/
+
+			// var previous = document.getElementById("previous").value;
+			// var previous = document.getElementById("previous").text;
+			var pagPrimera = dwr.util.getValue("pagPrimera");
+			var pagAnterior = dwr.util.getValue("pagAnterior");
+			var pagSiguiente = dwr.util.getValue("pagSiguiente");
+			var PagUltima = dwr.util.getValue("PagUltima");
+			var noResultados = dwr.util.getValue("noResultados");
+			
+			var currData = [];
+
+			var table = $('#example').DataTable({
+				
+				"bAutoWidth": false,
+				
+				"columnDefs": [{
+			        width: "15%",
+			        targets: 0
+			      },
+			      {
+			        width: "40%",
+			        targets: 1
+			      },
+			      {
+			        width: "12%",
+			        targets: 2
+			      },
+			      {
+			        width: "14%",
+			        targets: 3
+			      },
+			      {
+			        width: "7%",
+			        targets: 4
+			      },
+			      {
+			        width: "12%",
+			        targets: 5
+			      }
+			    ],
+				
+				
+			    stateSave: true,
+				
+				"dom": 'lrtip', // Se elimina el input de busqueda principal
+				"language" : {
+					"lengthMenu" : "_MENU_ " + '[[#{text.listar.tabla.registros}]]',
+					"search" : "Messi: ",
+					"info": "Pagina _PAGE_ / _PAGES_ (_MAX_ reg. totales)",
+					"infoEmpty" : "Pagina 0 / 0",
+					"infoFiltered": "(filtrado de _MAX_ registros totales)",
+					"zeroRecords" : noResultados,
+					"paginate" : {
+						"first" : pagPrimera,
+						"previous" : pagAnterior,
+						"next" : pagSiguiente,
+						"last" : PagUltima
+					}
+				},
+				"pagingType" : "full_numbers",
+				"orderCellsTop": true,
+				"responsive": true,
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				"fnPreDrawCallback": function(oSettings) {
+			        /* reset currData before each draw*/
+			        currData = [];
+			    },
+			    "fnRowCallback": function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+			        /* push this row of data to currData array*/
+			        currData.push(aData);
+
+			    },
+			    "fnDrawCallback": function(oSettings) {
+			        /* can now access sorted data array*/
+			        console.log(currData);
+			        //alert(currData);
+			        
+			        var resultado = [];
+					
+					/*
+			        for (var i = 0; i < currData.length; i++) {
+						
+						var poblacionReg = currData[i];
+						
+						var obj = new Student(poblacionReg[0], poblacionReg[1], poblacionReg[2], poblacionReg[3], poblacionReg[4], poblacionReg[5]);
+						JSON.stringify(obj);
+						resultado.push(obj);
+					}
+					*/
+					var dataEx = $('#example').DataTable().rows().data().toArray();
+					for (var i = 0; i < dataEx.length; i++) {
+						var poblacionReg = dataEx[i];
+						
+						var obj = new Student(poblacionReg[0], poblacionReg[1], poblacionReg[2], poblacionReg[3], poblacionReg[4], poblacionReg[5]);
+						JSON.stringify(obj);
+						resultado.push(obj);
+					}
+					
+					//alert(JSON.stringify(resultado));
+
+					
+					$('#datosPdf').val(JSON.stringify(resultado));
+					$('#datosXls').val(JSON.stringify(resultado));
+					$('#datosCsv').val(JSON.stringify(resultado));
+					$('#datosXml').val(JSON.stringify(resultado));
+					$('#datosJson').val(JSON.stringify(resultado));
+			    }
+				
+				
+				
+				
+				
+				
+				
+				
+				
+
+				/*
+				initComplete: function () {
+		            // Apply the search
+		            this.api().columns().every( function () {
+		                var that = this;
+		 
+		                $( 'input', this.footer() ).on( 'keyup change clear', function () {
+		                    if ( that.search() !== this.value ) {
+		                        that
+		                            .search( this.value )
+		                            .draw();
+		                    }
+		                } );
+		            } );
+		        }
+				*/
+				
+				
+				
+				
+	    		
+				
+				
+			});
+			
+			
+			// Sort by columns 1 and 2 and redraw
+			table
+			    .order( [ 0, 'asc' ], [ 1, 'asc' ], [ 2, 'asc' ], [ 3, 'asc' ], [ 4, 'asc' ], [ 5, 'asc' ] )
+			    .draw();
+			
+			
+			//$( '#datos' ).val( JSON.stringify(currData) );
+			//var operationCollection = [];
+
+			//var test1 = { tipoTerritorio: "Provincia", nombre: "ToleTole", codigoOficial: "XX", tipoFuente: "Censo", anio: "2000", poblacion: "1" };
+			//operationCollection.push(test1);
+			//var test2 = { tipoTerritorio: "Provincia", nombre: "Albacete", codigoOficial: "YY", tipoFuente: "Censo", anio: "2000", poblacion: "2" };
+			//operationCollection.push(test2);
+			
+			//$('#datos').val(JSON.stringify(operationCollection));
+			
+			
+			
+			
+			
+			
+			$('#desPepito').val('hola don jose');
+			//var message = '[[${desPepito}]]' + '99';
+			//alert(message);
+			
+			//var data = table.rows({search:'applied'}).data();
+			//alert(data);
+			//var currData = [];
+
+			
+ 
+			//alert( 'The table has '+data.length+' records' );
+			//alert( 'Pupil name in the first row is: '+ rows[0].nombre );
+			
+
+			//$('.dataTables_length').addClass('bs-select');
+			
+			
+			
+			
+		 
+			
+			
+			
+			
+			var regsActuales = dwr.util.getValue("regsActuales");
+			var regsTotales = dwr.util.getValue("regsTotales");
+			
+			if (regsActuales == regsTotales) {
+				$('#btnCargar').addClass("btn btn-light disabled");
+			} else {
+				$('#btnCargar').addClass("btn btn-secondary");
+			}
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		});
+		
+		
+		
+		$('#btnCargar').on('click', function(e) {
+			$('#modalCargaRegs').modal('show');
+			e.preventDefault();
+		});
+		
+		$('#confirmGuardar').on('click', function(e) {
+			$('#modalGuardaForm').modal('show');
+			e.preventDefault();
+		});
+		
+		$( "#formModifGuard" ).submit(function(e) {
+			 var mensaje = dwr.util.getValue("mensajedesc");
+			 $('#descripcion').val(mensaje);
+			 
+			 $('#modalGuardaForm').modal('hide');
+		});
+		
+		
+		
+		
+		
+		
+		
+		function Student(tipoTerritorio, nombre, codigoOficial, tipoFuente, anio, poblacion) {
+			this.tipoTerritorio = tipoTerritorio;
+			this.nombre = nombre;
+			this.codigoOficial = codigoOficial;
+			this.tipoFuente = tipoFuente;
+			this.anio = anio;
+			this.poblacion = poblacion;
+		}
+		
+		/*
+		function procesarMensaje(element) {
+			
+			//element.name= 'guardar';
+			//element.id = 'guardar';
+			
+			
+			var mensaje = dwr.util.getValue("pepito");
+			$('#participant').val(mensaje);
+			
+			//$('#modalGuardaForm').modal('hide');
+		
+			
+			//document.getElementById("formModifGuard").submit(); 
+			//element.submit();
+			
+		}
+		*/
+		
+		
+		
+		
+		
+		
+		
+		
+		/*
+		function cargarMasRegistros() {
+			
+			
+			mainController.cargarMasDatos( {
+				callback:function(result) {
+						
+					
+				}	
+			});
+			
+			
+		}
+		*/
+		
+		
+	</script>
+
+</body>
+</html>

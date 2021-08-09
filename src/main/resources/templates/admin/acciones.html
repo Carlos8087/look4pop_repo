@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head th:replace="layout/layout :: head"></head>
+
+	<body>
+
+		<header th:replace="layout/layout :: header"></header>
+		
+		<hr class="w-75">
+
+		<div class="container mb-4">
+			<div class="row">
+				<div class="col-6 mb-3">
+					<a th:href="@{/index}"
+						class="btn btn-secondary btn-sm" th:utext="'&laquo; ' + #{text.boton.inicio}"></a>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col offset-1 mt-4">
+				<p class="text-justify" th:text="#{text.admin.intro}"></p>
+				</div>
+			</div>
+		
+			<div class="row mt-4 justify-content-center">
+				<div class="mi-formulario card col-5 mb-2" style="background-color: #dedddd;">
+						<div class="card-body">
+							<a class="btn btn-lg btn-block" th:text="#{text.admin.acciones.gest.fuentes}" th:href="@{/admin/fuentes}" style="text-align: center; background-color: #2f3180; color: white; font-weight: bold;"></a>
+						</div>
+				</div>
+			</div>
+		
+			<div class="row mt-4 justify-content-center">
+				<div class="mi-formulario card col-5 mb-2" style="background-color: #dedddd;">
+					<div class="card-body">
+						<a class="btn btn-lg btn-block" th:text="#{text.admin.acciones.gest.usuarios}" th:href="@{/admin/usuarios}" style="text-align: center; background-color: #97b447; color: white; font-weight: bold;"></a>
+					</div>
+				</div>
+			</div>
+		
+			<div class="row mt-4 justify-content-center">
+				<div class="mi-formulario card col-5 mb-4" style="background-color: #dedddd;">
+					<div class="card-body">
+						<a class="btn btn-lg btn-block" th:text="#{text.admin.acciones.gest.uploadscript}" th:href="@{/admin/upload}" style="text-align: center; background-color: #d98b33; color: white; font-weight: bold;"></a>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<footer th:replace="layout/layout :: footer"></footer>
+
+	</body>
+</html>

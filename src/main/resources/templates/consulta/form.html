@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head th:replace="layout/layout :: head"></head>
+
+	<body>
+
+	
+		<!-- <input type="hidden" id="loadControl" value="false" /> -->
+	
+
+		<header th:replace="layout/layout :: header"></header>
+		
+		<hr class="w-75">
+
+		<div class="container">
+			<div class="row">
+				<div class="col-6">
+					<a th:href="@{/index}"
+						class="btn btn-secondary btn-sm" th:utext="'&laquo; ' + #{text.boton.inicio}"></a>
+				</div>
+				<div class="col-md-6">
+					<div class="row justify-content-end">
+						<div class="col-md-3 text-right">
+							<button class="btn btn-sm" style="background-color: #f2f594; border: 1px solid black" data-toggle="modal" data-target="#ejemplo-modal" th:text="#{text.form.informacion.boton}"></button>
+						</div>
+					</div>
+					<div class="row justify-content-end">
+						<div class="col">
+							<p class="font-italic text-right" th:text="#{text.form.informacion}"></p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col offset-1">
+				<p class="text-justify" th:text="#{text.form.intro}"></p>
+				</div>
+			</div>
+			<div class="row mt-3">
+				<div class="col-6 offset-1">
+					<small class="font-italic"><span class="text-danger font-weight-bold h6">(*) </span><label th:text="#{text.form.campo.obligatorio}"></label></small>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-6 offset-1">
+					<small class="font-italic"><span th:text="#{text.form.codigo.oficial}"></span></small>
+				</div>
+			</div>
+			<!-- 
+			<div class="row">
+				<div class="col-6">
+					<small class="font-italic"><span class="text-success font-weight-bold h6">(-) </span><label th:text="#{text.form.campo.condicional}"></label></small>
+				</div>
+			</div>
+			-->
+			
+			<!-- Ventana modal -->
+				<div class="modal fade" id="ejemplo-modal" tabindex="-1" role="dialog" aria-labelledby="ejemplo-modal" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<div class="row">
+									<div class="col">
+										<h5 class="modal-tittle font-weight-bold" th:utext="#{text.form.informacion.header.1}"></h5>
+										<h6 class="modal-subtittle font-italic" th:utext="#{text.form.informacion.header.2}"></h6>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<button class="close" data-dismiss="modal" aria-label="Cerrar">
+										<span aria-hidden="true">&times;</span></button>
+									</div>
+								</div>
+							</div>
+							<div class="modal-body">
+								<p class="text-justify h6">
+								<span class="text-danger font-weight-bold" th:utext="#{text.form.informacion.body.titulo}"></span>
+								<br><br>
+								<strong><em><span th:utext="#{text.form.informacion.body.nivel}"></span></em></strong>&nbsp;<span th:utext="#{text.form.informacion.body.nivel.desc}"></span>&nbsp;<span class="text-primary" th:utext="#{text.form.informacion.body.selunica}"></span>
+								<br><br>
+								<strong><em><span th:utext="#{text.form.informacion.body.ambgen}"></span></em></strong>&nbsp;<span th:utext="#{text.form.informacion.body.ambgen.desc}"></span>&nbsp;<span class="text-primary" th:utext="#{text.form.informacion.body.selunica}"></span>
+								<br><br>
+								<strong><em><span th:utext="#{text.form.informacion.body.ambpar}"></span></em></strong>&nbsp;<span th:utext="#{text.form.informacion.body.ambpar.desc}"></span>&nbsp;<span class="text-primary" th:utext="#{text.form.informacion.body.multisel}"></span>
+								<br><br>
+								<strong><em><span th:utext="#{text.form.informacion.body.tpfuente}"></span></em></strong>&nbsp;<span th:utext="#{text.form.informacion.body.tpfuente.desc}"></span>&nbsp;<span class="text-primary" th:utext="#{text.form.informacion.body.multisel}"></span>
+								<br><br>
+								<strong><em><span th:utext="#{text.form.informacion.body.anio}"></span></em></strong>&nbsp;<span th:utext="#{text.form.informacion.body.anio.desc}"></span>&nbsp;<span class="text-primary" th:utext="#{text.form.informacion.body.multisel}"></span>
+								<br>
+							</div>
+						</div>
+					</div>
+				</div>
+			<div class="row mt-1 mb-4 justify-content-center">
+				<div class="col-10 mb-4">
+					<div class="mi-formulario card">
+						<div class="card-body bg-light">
+						
+						<!-- Para mostrar todos los errores de validacion juntos -->
+						<div th:object="${consultaForm}" th:remove="tag">
+						<!-- remove 'tag' -> para que no aparezca el contenedor en el HTML -->
+						<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+							<li th:each="err: ${#fields.errors('*')}" th:text="${err}"></li>
+						</ul>
+						
+						</div>
+				
+							<form th:action="@{/consulta/form}" th:object="${consultaForm}" method="post">
+								
+								<div class="row justify-content-center">
+									<div class="col-auto">
+										<h6 class="mb-4 font-weight-bold font-italic h6" style="color: #012264;" th:text="#{text.form.title.nivamb}"></h6>
+									</div>
+								</div>
+							
+								<div class="row form-group justify-content-around">
+									<div class="col-lg-4 mt-1">
+										<label for="selectNiveles" th:utext="#{text.form.nivel} + ' (*):'"></label>
+										<div class="col-10 mb-2 offset-1">
+											<select id="selectNiveles" th:field="*{nivel}" class="form-control selectpicker" data-live-search="true" data-size="5" th:errorclass="'border border-danger'" onChange="getAmbitoGenLst()">
+												<option selected value="-1"></option>
+												<option th:each="niv: ${selectNiveles}" th:text="${niv.nombre}" th:value="${niv.idTt}"></option>
+											</select>
+										</div>
+										<small th:if="${#fields.hasErrors('nivel')}" th:errors="*{nivel}" class="form-text text-danger"></small>
+										<small class="form-text text-muted font-italic" th:text="#{text.form.descripcion.nivel}"></small>
+									</div>
+									
+									<div class="col-lg-4 mt-1">
+										<label for="selectAmbitosGen" th:text="#{text.form.ambito.gen} + ' (*):'"></label>
+										<div class="col-10 mb-2 offset-1">
+											<select disabled id="selectAmbitosGen" th:field="*{ambitoGen}" class="form-control selectpicker" data-live-search="true" data-size="5" th:errorclass="'border border-danger'" onChange="getAmbitoParLst()">
+												<option selected value="-1"></option>
+												<option th:each="amg: ${selectAmbitosGen}" th:text="${amg.nombre}" th:value="${amg.idTt}"></option>
+											</select>
+										</div>
+										<small th:if="${#fields.hasErrors('ambitoGen')}" th:errors="*{ambitoGen}" class="form-text text-danger"></small>
+										<small class="form-text text-muted font-italic" th:text="#{text.form.descripcion.ambgen}"></small>
+									</div>
+									
+									<div class="col-lg-4 mt-1">
+										<label for="selectAmbitosPar" th:text="#{text.form.ambito.par} + ' (*):'"></label>
+										<div class="col-10 mb-2 offset-1">
+											<select disabled multiple id="selectAmbitosPar" th:field="*{ambitosPar}" class="form-control selectpicker" data-live-search="true" data-size="5" th:errorclass="'border border-danger'">
+												<option th:each="amp: ${selectAmbitosPar}" th:text="${amp.nombreActual} + ' [' + ${amp.codigoOficial} + ']'" th:value="${amp.idTerritorio}"></option>
+											</select>
+										</div>
+										<small th:if="${#fields.hasErrors('ambitosPar')}" th:errors="*{ambitosPar}" class="form-text text-danger"></small>
+										<small class="form-text text-muted font-italic" th:text="#{text.form.descripcion.ambpar}"></small>
+									</div>
+								</div>
+								
+								<hr class="w-50">
+								
+								<div class="row justify-content-center">
+									<div class="col-auto">
+										<h6 class="mb-4 font-weight-bold font-italic h6" style="color: #012264;" th:text="#{text.form.title.fuente}"></h6>
+									</div>
+								</div>
+								
+								<div class="row form-group justify-content-around">
+								
+									<div class="col-lg-4 mt-1">
+										<label for="selectTpsFuente" th:text="#{text.form.tpfuente} + ' (*):'"></label>
+										<div class="col-10 mb-2 offset-1">
+											<select multiple id="selectTpsFuente" th:field="*{tpsFuente}" class="form-control selectpicker" data-live-search="true" data-size="5" th:errorclass="'border border-danger'" onChange="getAnioLst()">
+												<option value="censoderecho" th:text="#{text.form.tipofuente.censo.derecho}"></option>	
+												<option value="censohecho" th:text="#{text.form.tipofuente.censo.hecho}"></option>
+												<option value="padron" th:text="#{text.form.tipofuente.padron}"></option>	
+											</select>
+										</div>
+										<small th:if="${#fields.hasErrors('tpsFuente')}" th:errors="*{tpsFuente}" class="form-text text-danger"></small>
+										<small class="form-text text-muted font-italic" th:text="#{text.form.descripcion.tipofuente}"></small>
+									</div>
+									
+									<div class="col-lg-4 mt-1">
+										<label for="selectAnios" th:text="#{text.form.anio} + ' (*):'"></label>
+										<div class="col-10 mb-2 offset-1">
+											<select multiple id="selectAnios" th:field="*{anios}" class="form-control selectpicker" data-live-search="true" data-size="5" th:errorclass="'border border-danger'">	
+												<option th:each="ani: ${selectAnios}" th:text="${ani.tipo}" th:value="${ani.anio}"></option>	
+											</select>
+										</div>
+										<small th:if="${#fields.hasErrors('anios')}" th:errors="*{anios}" class="form-text text-danger"></small>
+										<small class="form-text text-muted font-italic" th:text="#{text.form.descripcion.anios}"></small>
+									</div>
+								
+								</div>
+						
+								<!-- 
+								
+								<div class="form-group row align-items-center">
+									<div class="col-12 col-md-4 mb-4 mt-4">
+										<div class="col-md-9 mb-2 offset-1">
+											<div class="custom-control custom-checkbox">
+												<input type="checkbox" name="censo" value="censo" id="chkCenso" class="custom-control-input offset-1" th:field="*{tpsFuente}" th:errorclass="'border border-danger'" onclick="manageElementoTpsCenso()">
+												<label for="chkCenso" class="custom-control-label offset-1" th:text="#{text.form.tpfuente.censo} + ' (-)'"></label>
+											</div>
+											<small th:if="${#fields.hasErrors('tpsFuente')}" th:errors="*{tpsFuente}" class="form-text text-danger offset-1"></small>
+										</div>
+										<small class="form-text text-muted font-italic offset-1" th:text="#{text.form.descripcion.tpfuente.censo}"></small>
+									</div>
+									
+									<div class="col-12 col-md-4 mb-4 mt-4">
+										<label for="selectTpsCenso" th:text="#{text.form.tpcenso} + ' (-):'" class="offset-2"></label>
+										<div class="col-md-8 mb-2 offset-2">
+											<select disabled multiple id="selectTpsCenso" th:field="*{tpsCenso}" class="form-control selectpicker" data-live-search="true" data-size="5" th:errorclass="'border border-danger'" onChange="getCensoAnioLst()">
+												<option value="derecho" th:text="#{text.form.tpcenso.derecho}"></option>	
+												<option value="hecho" th:text="#{text.form.tpcenso.hecho}"></option>	
+											</select>
+											<small th:if="${#fields.hasErrors('tpsCenso')}" th:errors="*{tpsCenso}" class="form-text text-danger"></small>
+										</div>
+										<small class="form-text text-muted font-italic offset-2" th:text="#{text.form.descripcion.tpcensos}"></small>
+									</div>
+									
+									<div class="col-12 col-md-4 mb-4 mt-4">
+										<label for="selectCensoDerechoAnios" th:text="#{text.form.censo.derecho.anio} + ' (-):'" class="offset-2"></label>
+										<div class="col-md-8 mb-2 offset-2">
+											<select disabled multiple id="selectCensoDerechoAnios" th:field="*{censoDerAnios}" class="form-control selectpicker" data-live-search="true" data-size="5" th:errorclass="'border border-danger'">	
+												<option th:each="cda: ${selectCensoDerechoAnios}" th:text="${cda.anio}" th:value="${cda.anio}"></option>
+											</select>
+											<small th:if="${#fields.hasErrors('censoDerAnios')}" th:errors="*{censoDerAnios}" class="form-text text-danger"></small>
+										</div>
+										<small class="form-text text-muted font-italic offset-2 mb-4" th:text="#{text.form.descripcion.anios}"></small>
+										
+										<label for="selectCensoHechoAnios" th:text="#{text.form.censo.hecho.anio} + ' (-):'" class="offset-2 mt-4"></label>
+										<div class="col-md-8 mb-2 offset-2">
+											<select disabled multiple id="selectCensoHechoAnios" th:field="*{censoHecAnios}" class="form-control selectpicker" data-live-search="true" data-size="5" th:errorclass="'border border-danger'">
+												 <option value="-1"></option> 
+											</select>
+											<small th:if="${#fields.hasErrors('censoHecAnios')}" th:errors="*{censoHecAnios}" class="form-text text-danger"></small>
+										</div>
+										<small class="form-text text-muted font-italic offset-2" th:text="#{text.form.descripcion.anios}"></small>
+									</div>
+								</div>
+								
+								<hr class="w-50">
+								
+								<div class="form-group row align-items-center">
+									<div class="col-12 col-md-4 mb-4 mt-3">
+										<div class="col-md-9 offset-1">
+											<div class="custom-control custom-checkbox">
+												<input type="checkbox" name="padron" value="padron" id="chkPadron" class="custom-control-input offset-1" th:field="*{tpsFuente}" th:errorclass="'border border-danger'" onclick="getPadronAnioLst()">
+												<label for="chkPadron" class="custom-control-label offset-1" th:text="#{text.form.tpfuente.padron} + ' (-)'"></label>
+											</div>
+											<small th:if="${#fields.hasErrors('tpsFuente')}" th:errors="*{tpsFuente}" class="form-text text-danger offset-1"></small>
+										</div>
+										<small class="form-text text-muted font-italic offset-1" th:text="#{text.form.descripcion.tpfuente.padron}"></small>
+									</div>
+									
+									<div class="col-12 col-md-4 mb-4 mt-3">
+										<label for="selectPadronAnios" th:text="#{text.form.anio} + ' (-):'" class="offset-2"></label>
+										<div class="col-md-8 mb-2 offset-2">
+											<select disabled multiple id="selectPadronAnios" th:field="*{padronAnios}" class="form-control selectpicker" data-live-search="true" data-size="5" th:errorclass="'border border-danger'">
+												<option th:each="pan: ${selectPadronAnios}" th:text="${pan.anio}" th:value="${pan.anio}"></option>
+											</select>
+											<small th:if="${#fields.hasErrors('padronAnios')}" th:errors="*{padronAnios}" class="form-text text-danger"></small>
+										</div>
+										<small class="form-text text-muted font-italic offset-2" th:text="#{text.form.descripcion.anios}"></small>
+									</div>
+								</div>
+								
+								-->
+								
+								<hr class="w-50">
+								
+								<div class="row">
+									<div class="col-6 mb-1 align-self-end">
+									
+										<button type="reset" class="btn btn-secondary" onclick="clearForm()">
+											<img th:src="@{/images/limpiar.png}" style="width:22px; height:22px;" />&nbsp;
+											<span th:text="#{text.form.boton.limpiar}"></span>
+										</button>
+									
+									<!-- 
+										<input type="button" th:value="#{text.form.boton.limpiar}"
+												class="btn btn-secondary btn-sm" onclick="clearForm()" /> -->
+										
+									</div>
+									<div class="col-6 mb-1 text-right">
+										<input type="submit" name="consultar" th:value="#{text.form.boton.consultar}"
+												class="btn btn-secondary" style="padding: 7px;"/>
+										<!-- <small class="form-text text-muted font-italic offset-4" th:text="#{text.form.descripcion.validacion}"></small> -->
+									</div>
+									<!-- 
+									<div class="col-5 mt-1 mb-1 text-right">
+										<input type="submit" name="descargar" th:value="#{text.form.boton.descargar}"
+											class="btn btn-secondary btn-md" />
+										<!-- <small class="form-text text-muted font-italic offset-3" th:text="#{text.form.descripcion.validacion}"></small> -->
+									<!-- 
+									</div>
+									-->
+								</div>
+
+							</form>
+						</div>	
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<footer th:replace="layout/layout :: footer"></footer>
+		<script th:replace="utils/js/combos-dependientes :: javascript"></script>
+
+	</body>
+</html>

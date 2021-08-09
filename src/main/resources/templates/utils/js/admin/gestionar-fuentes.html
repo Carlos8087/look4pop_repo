@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+	<script type="text/javascript" th:fragment="javascript">
+	
+	$(document).ready(function() {
+		
+		var tpAccion = dwr.util.getValue("tpAccion");
+		var censo = document.getElementById("chkCenso");
+		var padron = document.getElementById("chkPadron");
+	
+		if ( (censo.checked === false)
+				&& (padron.checked === false) ) {
+			censo.checked = true;
+		}
+			
+		if (tpAccion === 'E') {
+			getCensoAnioLst();
+			getPadronAnioLst();
+		}
+		
+		if (censo.checked === true) {
+			$('#selectTpsCenso').prop('disabled', false);
+			$('#anioC').prop('disabled', false);
+			
+			$('#anioP').prop('disabled', true);
+			
+			// Refresco del selectpicker
+			$('#selectTpsCenso').selectpicker('refresh');
+			// Refresco del selectpicker
+			$('#anioC').selectpicker('refresh');
+			// Refresco del selectpicker
+			$('#anioP').selectpicker('refresh');
+		}
+		if (padron.checked === true) {
+			$('#selectTpsCenso').prop('disabled', true);
+			$('#anioC').prop('disabled', true);
+			
+			$('#anioP').prop('disabled', false);
+			
+			// Refresco del selectpicker
+			$('#selectTpsCenso').selectpicker('refresh');
+			// Refresco del selectpicker
+			$('#anioC').selectpicker('refresh');
+			// Refresco del selectpicker
+			$('#anioP').selectpicker('refresh');
+		}
+		
+		// Literal por defecto cuando no hay nada seleccionado en los selectpicker
+		/*
+		$(".selectpicker").selectpicker({
+	        noneSelectedText : '------- Selec. -------'
+	    });
+		
+		// Refresco de los selectpicker
+		$(".selectpicker").selectpicker('refresh');
+		*/
+		
+	});
+	
+	// Mostrar detalle usuario
+	function gestionarFuentes(tipoFuente) {
+		
+		var tpAccion = dwr.util.getValue("tpAccion");
+		var tpsCenso = document.getElementById("selectTpsCenso");
+		var anioCenso = document.getElementById("anioC");
+		var anioPadron = document.getElementById("anioP");
+		
+		if (tipoFuente === 'C') {
+			$('#selectTpsCenso').prop('disabled', false);
+			$('#anioC').prop('disabled', false);
+			
+			$('#anioP').prop('disabled', true);
+			
+			if (tpAccion === 'E') {
+				getCensoAnioLst();
+			}
+		}
+		
+		if (tipoFuente === 'P') {
+			$('#selectTpsCenso').prop('disabled', true);
+			$('#anioC').prop('disabled', true);
+			
+			$('#anioP').prop('disabled', false);
+			
+			if (tpAccion === 'E') {
+				getPadronAnioLst();
+			}
+		}
+		
+		if (tpAccion === 'A') {
+			anioCenso.value = "";
+			anioPadron.value = "";
+			
+			// Refresco del selectpicker
+			$('#selectTpsCenso').selectpicker('refresh');
+		} else {
+			// Refresco del selectpicker
+			$('#anioC').selectpicker('refresh');
+			// Refresco del selectpicker
+			$('#anioP').selectpicker('refresh');
+			// Refresco del selectpicker
+			$('#selectTpsCenso').selectpicker('refresh');
+		}
+	
+	}
+	
+	
+	
+	
+	// Combos años segun tipo de censo
+	function getCensoAnioLst() {
+		 
+		var tpsCenso = dwr.util.getValue("selectTpsCenso");
+		var anioC = document.getElementById("anioC");
+		
+		// COMBO FUENTES CENSOS - Combo vacio, deshabilitado y opcion por defecto
+		dwr.util.removeAllOptions("anioC");
+		
+		$('#anioC').prop('disabled', true);
+		
+		// Refresco del selectpicker
+		$('#anioC').selectpicker('refresh');
+		
+		if (tpsCenso !== '') {
+			
+			if (tpsCenso === 'derecho') {
+				
+				fuenteController.getFuenteCensoByTipoLst('derecho', {
+					callback:function(result) {
+			
+						if ( (result.length != null) && (result.length > 0) ) {
+							
+							for (var i = 0; i < result.length; i++) {
+								var opt = result[i];
+								var el = document.createElement("option");
+								el.textContent = opt.anio;
+								el.value = opt.anio;
+								anioC.appendChild(el);
+							}
+							
+							// Se habilita el select
+							$('#anioC').prop('disabled', false);
+							
+							// Refresco del selectpicker
+							$('#anioC').selectpicker('refresh');
+							
+						}
+						
+					}	
+				});
+				
+				
+			}
+			
+			if (tpsCenso === 'hecho') {
+				
+				fuenteController.getFuenteCensoByTipoLst('hecho', {
+					callback:function(result) {
+			
+						if ( (result.length != null) && (result.length > 0) ) {
+							
+							for (var i = 0; i < result.length; i++) {
+								var opt = result[i];
+								var el = document.createElement("option");
+								el.textContent = opt.anio;
+								el.value = opt.anio;
+								anioC.appendChild(el);
+							}
+							
+							// Se habilita el select
+							$('#anioC').prop('disabled', false);
+							
+							// Refresco del selectpicker
+							$('#anioC').selectpicker('refresh');
+							
+						}
+						
+					}	
+				});
+				
+			}
+			
+		}
+		
+	}
+	
+	// Combo años padron
+	function getPadronAnioLst() {
+		 
+		var anioP = document.getElementById("anioP");
+		
+		// COMBO FUENTES PADRONES - Combo vacio, deshabilitado y opcion por defecto
+		dwr.util.removeAllOptions("anioP");
+		
+		$('#anioP').prop('disabled', true);
+		
+		// Refresco del selectpicker
+		$('#anioP').selectpicker('refresh');
+		
+		//if (document.getElementById("chkPadron").checked === true) {
+			
+			fuenteController.getFuentePadronLst( {
+				callback:function(result) {
+		
+					if ( (result.length != null) && (result.length > 0) ) {
+						
+						for (var i = 0; i < result.length; i++) {
+							var opt = result[i];
+							var el = document.createElement("option");
+							el.textContent = opt.anio;
+							el.value = opt.anio;
+							anioP.appendChild(el);
+						}
+						
+						if (document.getElementById("chkPadron").checked === true) {
+							// Se habilita el select
+							$('#anioP').prop('disabled', false);
+							// Refresco del selectpicker
+							$('#anioP').selectpicker('refresh');
+						} else {
+							// Se habilita el select
+							$('#anioP').prop('disabled', true);
+							// Refresco del selectpicker
+							$('#anioP').selectpicker('refresh');
+						}
+						
+						// Refresco del selectpicker
+						$('#anioP').selectpicker('refresh');
+						
+					}
+					
+				}	
+			});
+			
+		//}
+		
+	}
+	
+	function isNumberKey(evt) {
+	    var charCode = (evt.which) ? evt.which : evt.keyCode
+	    if (charCode > 31 && (charCode < 48 || charCode > 57))
+	        return false;
+	    return true;
+	}
+	
+	$('#confirmFueAlta').on('click', function(e) {
+		$('#modalFueAlta').modal('show');
+		e.preventDefault();
+	});
+	
+	$('#confirmFueEliminar').on('click', function(e) {
+		$('#modalFueEliminar').modal('show');
+		e.preventDefault();
+	});
+	
+	</script>
+
+</body>
+
+</html>

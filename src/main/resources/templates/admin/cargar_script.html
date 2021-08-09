@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layout/layout :: head"></head>
+
+<body>
+
+	<div id="i18n_combo_cargando_futbolistas" th:text="#{text.combo.cargando.futbolistas}" style="display: none;"></div>
+	<div id="i18n_combo_cargando_coches" th:text="#{text.combo.cargando.coches}" style="display: none;"></div>
+	<div id="i18n_combo_opcion_pd_futbolistas" th:text="#{text.combo.futbolistas.default}" style="display: none;"></div>
+	<div id="i18n_combo_opcion_pd_coches" th:text="#{text.combo.coches.default}" style="display: none;"></div>
+	
+	<input type="hidden" id="loadControl" value="false" />
+	
+
+	<header th:replace="layout/layout :: header"></header>
+
+	<hr class="w-75">
+		
+		<div class="container mb-4">
+			<div class="row">
+				<div class="col-6 mb-3">
+					<a th:href="@{/admin}"
+						class="btn btn-secondary btn-sm" th:utext="'&laquo; ' + #{text.boton.volver.admin}"></a>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col offset-1 mt-4">
+				<p class="text-justify" th:text="#{text.admin.script.intro}"></p>
+				</div>
+			</div>
+			<div class="row mt-3">
+				<div class="col-6 offset-3">
+					<small class="font-italic"><span class="text-danger font-weight-bold h6">(*) </span><label th:text="#{text.form.campo.obligatorio}"></label></small>
+				</div>
+			</div>
+			<div class="row mt-1 mb-4 justify-content-center">
+				<div class="col-6 mb-4">
+					<div class="mi-formulario card">
+						<div class="card-header" style="background: linear-gradient(90deg, rgba(120,168,226,1) 0%, rgba(248,249,250,1) 100%);">
+							<div class="row">
+								<div class="col my-2">
+									<!-- <p th:text="${tituloHeader}" class="font-weight-bold my-1 h6"></p> -->
+								</div>
+							</div>
+						</div>
+						<div class="card-body bg-light">
+			
+							<form th:action="@{/admin/upload}" method="post" enctype="multipart/form-data" id="formUplScript">
+				
+								<div class="row">
+									<div class="form-group col-12">
+										<label for="file" th:utext="#{text.admin.script.file} + ' (*):'"></label>
+										<input type="file" name="file" id="file"
+											class="form-control" />
+										
+									</div>
+								</div>
+								
+								
+
+				
+				
+				
+				<!-- 
+					<div class="form-group row">
+						<label for="file" class="col-form-label col-sm-2">Foto</label>
+						<div class="col-sm-6">
+							<input type="file" name="file" class="form-control" />
+						</div>
+					</div>
+					-->
+					
+					<div class="row mt-4 justify-content-center">
+						<div class="form-group col-5">
+							<input type="submit" name="confirmUplScript" id="confirmUplScript" class="btn btn-secondary btn-md btn-block"
+								th:value="#{text.admin.script.boton}" />
+						</div>
+					</div>
+							</form>
+				
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<!-- Modal -->
+			<div class="modal fade" id="modalUplScript" tabindex="-1" role="dialog" aria-labelledby="modalUplScriptAccionTitle" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+			    	<div class="modal-content"> 
+			      		<div class="modal-header">
+			        		<h5 class="modal-title" id="modalUplScriptLongTitle" th:text="#{text.confirm.accion}"></h5>
+			        		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          			<span aria-hidden="true">&times;</span>
+			        		</button>
+			      		</div>
+			      		<div class="modal-body">
+			        		<span th:text="#{text.confirm.upload.script}"></span>
+			      		</div>
+			      		<div class="modal-footer">
+			        		<button type="button" class="btn btn-danger" data-dismiss="modal" th:text="#{text.confirm.no}"></button>
+			        		<button type="submit" form="formUplScript" class="btn btn-success" th:text="#{text.confirm.si}"></button>
+			      		</div>
+			    	</div>
+			 	</div>
+			</div>
+		</div>
+
+	<footer th:replace="layout/layout :: footer"></footer>
+	<script th:replace="utils/js/admin/gestionar-script-bbdd :: javascript"></script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

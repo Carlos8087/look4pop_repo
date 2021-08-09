@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head th:replace="layout/layout :: head"></head>
+
+	<body>
+	
+		<header th:replace="layout/layout :: header"></header>
+
+		<hr class="w-75">
+		
+		<div class="container mb-4">
+			<div class="row">
+				<div class="col-6 mb-3">
+					<a th:href="@{/admin/usuarios}"
+						class="btn btn-secondary btn-sm" th:utext="'&laquo; ' + #{text.boton.volver.usuarios}"></a>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col offset-1 mt-4">
+					<p class="text-justify" th:text="#{text.admin.usuarios.acciones.eliminar.intro}"></p>
+				</div>
+			</div>
+			<div class="row mt-3">
+				<div class="col-6 offset-2">
+					<small class="font-italic"><span class="text-danger font-weight-bold h6">(*) </span><label th:text="#{text.form.campo.obligatorio}"></label></small>
+				</div>
+			</div>
+			<div class="row mt-1 mb-4 justify-content-center">
+				<div class="col-8 mb-4">
+					<div class="mi-formulario card">
+						<div class="card-header" style="background: linear-gradient(90deg, rgba(120,168,226,1) 0%, rgba(248,249,250,1) 100%);">
+							<div class="row">
+								<div class="col my-2">
+									<!-- <p th:text="${tituloHeader}" class="font-weight-bold my-1 h6"></p> -->
+								</div>
+							</div>
+						 </div>
+						<div class="card-body bg-light">
+						
+							<!-- Para mostrar todos los errores de validacion juntos -->
+							<div th:object="${usuarioForm}" th:remove="tag">
+							<!-- remove 'tag' -> para que no aparezca el contenedor en el HTML -->
+								<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+									<li th:each="err: ${#fields.errors('*')}" th:text="${err}"></li>
+								</ul>
+							</div>
+				
+							<form th:action="@{/admin/usuarios/eliminar/form}" th:object="${usuarioForm}" method="post" id="formUsuEliminar">
+								
+								<input type="hidden" th:value="E" name="tpAccion" id="tpAccion"/>
+								
+								<div class="row mt-4">
+								
+									<div class="form-group col-4">
+										<label for="selectUsuarios" th:utext="#{text.admin.form.etiq.usuario} + ' (*):'"></label>
+										<div class="col-12">
+											<select id="selectUsuarios" th:field="*{idUsuarioSelect}" class="form-control selectpicker" data-live-search="true" data-size="5" th:errorclass="'border border-danger'" onChange="getDetalleUsuario('E')">
+												<option selected value="-1"></option>
+												<option th:each="usuario: ${selectUsuarios}" th:text="${usuario.username} + ' [' + ${usuario.id} + ']'" th:value="${usuario.id}"></option>
+											</select>
+											<small th:if="${#fields.hasErrors('idUsuarioSelect')}" th:errors="*{idUsuarioSelect}" class="form-text text-danger"></small>
+										</div>
+										<small class="form-text text-muted font-italic" th:text="#{text.admin.form.desc.usernameselec}"></small>
+									</div>
+									
+								</div>
+								
+								<div class="row mt-4">
+									
+									<div class="form-group col-4">
+										<label for="username" th:utext="#{text.admin.form.etiq.username} + ':'"></label>
+										<div class="col">
+											<input disabled type="text" th:field="*{username}" class="form-control" name="username" id="username" />
+											<small th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="form-text text-danger"></small>
+										</div>
+										<small class="form-text text-muted font-italic" th:text="#{text.admin.form.desc.username}"></small>
+									</div>
+									
+									<div class="form-group col-4">
+										<label for="password" th:utext="#{text.admin.form.etiq.password} + ':'"></label>
+										<div class="col">
+											<input disabled type="text" th:field="*{password}" class="form-control" name="password" id="password" />
+											<small th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="form-text text-danger"></small>
+										</div>
+										<small class="form-text text-muted font-italic" th:text="#{text.admin.form.desc.password}"></small>
+									</div>
+									
+									<div class="form-group col-4">
+										<div class="custom-control custom-radio mt-4 offset-3">
+											<input disabled type="radio" th:field="*{enabled}" th:value="1" id="radio1" name="estado" class="custom-control-input"> 
+											<label for="radio1" class="custom-control-label" th:text="#{text.admin.form.etiq.activar}"></label> 
+										</div>
+										<div class="custom-control custom-radio offset-3">
+											<input disabled type="radio" th:field="*{enabled}" th:value="0" id="radio2" name="estado" class="custom-control-input"> 
+											<label for="radio2" class="custom-control-label" th:text="#{text.admin.form.etiq.desactivar}"></label>
+										</div>
+										<small class="form-text text-muted font-italic offset-3" th:text="#{text.admin.form.desc.activo}"></small>
+									</div>
+									
+								</div>
+								
+								<div class="row mt-4 justify-content-center">
+									<div class="form-group col-3">
+										<input type="submit" name="confirmUsuEliminar" id="confirmUsuEliminar" th:value="#{text.boton.eliminar}"
+												class="btn btn-secondary btn-md btn-block" style="text-align: center;"/>
+									</div>
+								</div>
+
+							</form>
+						</div>	
+					</div>
+				</div>
+			</div>
+			
+			<!-- Modal -->
+			<div class="modal fade" id="modalUsuEliminar" tabindex="-1" role="dialog" aria-labelledby="modalUsuEliminarAccionTitle" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+			    	<div class="modal-content"> 
+			      		<div class="modal-header">
+			        		<h5 class="modal-title" id="modalUsuEliminarLongTitle" th:text="#{text.confirm.accion}"></h5>
+			        		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          			<span aria-hidden="true">&times;</span>
+			        		</button>
+			      		</div>
+			      		<div class="modal-body">
+			        		<span th:text="#{text.confirm.usuario.eliminar}"></span>
+			      		</div>
+			      		<div class="modal-footer">
+			        		<button type="button" class="btn btn-danger" data-dismiss="modal" th:text="#{text.confirm.no}"></button>
+			        		<button type="submit" form="formUsuEliminar" class="btn btn-success" name="eliminar" id="eliminar" th:text="#{text.confirm.si}"></button>
+			      		</div>
+			    	</div>
+			 	</div>
+			</div>
+		</div>
+		
+		<footer th:replace="layout/layout :: footer"></footer>
+		<script th:replace="utils/js/admin/mostrar-detalle-usuarios :: javascript"></script>
+
+	</body>
+</html>

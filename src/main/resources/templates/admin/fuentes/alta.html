@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head th:replace="layout/layout :: head"></head>
+
+	<body>
+	
+		<header th:replace="layout/layout :: header"></header>
+
+		<hr class="w-75">
+		
+		<div class="container mb-4">
+			<div class="row">
+				<div class="col-6 mb-3">
+					<a th:href="@{/admin/fuentes}"
+						class="btn btn-secondary btn-sm" th:utext="'&laquo; ' + #{text.boton.volver.fuentes}"></a>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col offset-1 mt-4">
+					<p class="text-justify" th:text="#{text.admin.fuentes.acciones.alta.intro}"></p>
+				</div>
+			</div>
+			<div class="row mt-3">
+				<div class="col-6 offset-2">
+					<small class="font-italic"><span class="text-danger font-weight-bold h6">(*) </span><label th:text="#{text.form.campo.obligatorio}"></label></small>
+				</div>
+			</div>
+			<div class="row mt-1 mb-4 justify-content-center">
+				<div class="col-8 mb-4">
+					<div class="mi-formulario card">
+						<div class="card-header" style="background: linear-gradient(90deg, rgba(120,168,226,1) 0%, rgba(248,249,250,1) 100%);">
+							<div class="row">
+								<div class="col my-2">
+									<!-- <p th:text="${tituloHeader}" class="font-weight-bold my-1 h6"></p> -->
+								</div>
+							</div>
+						 </div>
+						<div class="card-body bg-light">
+						
+						<!-- Para mostrar todos los errores de validacion juntos -->
+						<div th:object="${fuenteForm}" th:remove="tag">
+							<!-- remove 'tag' -> para que no aparezca el contenedor en el HTML -->
+							<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+								<li th:each="err: ${#fields.errors('*')}" th:text="${err}"></li>
+							</ul>
+						</div>
+				
+							<form th:action="@{/admin/fuentes/alta/form}" th:object="${fuenteForm}" method="post" id="formFueAlta">
+								
+								<input type="hidden" th:value="A" name="tpAccion" id="tpAccion"/>
+								
+								<div class="row mt-4">
+									
+									<div class="form-group col-4">
+										<div class="custom-control custom-radio">
+											<input type="radio" name="censo" value="censo" id="chkCenso" class="custom-control-input" th:field="*{tipo}" th:errorclass="'border border-danger'" onclick="gestionarFuentes('C')">
+											<label for="chkCenso" class="custom-control-label" th:text="#{text.form.tpfuente.censo}"></label>
+										</div>
+										<small class="form-text text-muted font-italic" th:text="#{text.admin.form.desc.censo}"></small>
+									</div>
+
+									<div class="form-group col-3">
+										<label for="selectTpsCenso" th:text="#{text.form.tpcenso} + ':'"></label>
+										<div class="col">
+											<select id="selectTpsCenso" th:field="*{subtipo}" class="form-control selectpicker" data-live-search="true" data-size="5" th:errorclass="'border border-danger'">
+												<!-- <option value="-1"></option> -->
+												<option value="derecho" th:text="#{text.form.tpcenso.derecho}"></option>	
+												<option value="hecho" th:text="#{text.form.tpcenso.hecho}"></option>	
+											</select>
+											<small th:if="${#fields.hasErrors('subtipo')}" th:errors="*{subtipo}" class="form-text text-danger"></small>
+										</div>
+										<small class="form-text text-muted font-italic" th:text="#{text.admin.form.desc.tpcenso}"></small>
+									</div>
+									
+									<div class="form-group col-3 offset-1">
+										<label for="anioC" th:utext="#{text.form.anio} + ' (*):'"></label>
+										<div class="col">
+											<input type="text" onkeypress="return isNumberKey(event)" th:maxlength="4" th:field="*{anioC}" class="form-control" name="anioC" id="anioC" />
+											<small th:if="${#fields.hasErrors('anioC')}" th:errors="*{anioC}" class="form-text text-danger"></small>
+										</div>
+										<small class="form-text text-muted font-italic" th:text="#{text.admin.form.desc.anio}"></small>
+									</div>
+						
+								</div>
+								
+								<hr class="w-50">
+								
+								<div class="row mt-4">
+									
+									<div class="form-group col-4">
+										<div class="custom-control custom-radio">
+											<input type="radio" name="padron" value="padron" id="chkPadron" class="custom-control-input" th:field="*{tipo}" th:errorclass="'border border-danger'" onclick="gestionarFuentes('P')">
+											<label for="chkPadron" class="custom-control-label" th:text="#{text.form.tpfuente.padron}"></label>
+										</div>
+										<small class="form-text text-muted font-italic" th:text="#{text.admin.form.desc.padron}"></small>
+									</div>
+								
+									<div class="form-group col-3">
+										<label for="anioP" th:utext="#{text.form.anio} + ' (*):'"></label>
+										<div class="col">
+											<input disabled type="text" onkeypress="return isNumberKey(event)" th:maxlength="4" th:field="*{anioP}" class="form-control" name="anioP" id="anioP" />
+											<small th:if="${#fields.hasErrors('anioP')}" th:errors="*{anioP}" class="form-text text-danger"></small>
+										</div>
+										<small class="form-text text-muted font-italic" th:text="#{text.admin.form.desc.anio}"></small>
+									</div>
+									
+								</div>
+								
+								<div class="row mt-4 justify-content-center">
+									<div class="form-group col-3">
+										<input type="submit" name="confirmFueAlta" id="confirmFueAlta" th:value="#{text.boton.crear}"
+												class="btn btn-secondary btn-md btn-block" style="text-align: center;"/>
+									</div>
+								</div>
+
+							</form>
+						</div>	
+					</div>
+				</div>
+			</div>
+			
+			<!-- Modal -->
+			<div class="modal fade" id="modalFueAlta" tabindex="-1" role="dialog" aria-labelledby="modalFueAltaAccionTitle" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+			    	<div class="modal-content">
+			      		<div class="modal-header">
+			        		<h5 class="modal-title" id="modalFueAltaLongTitle" th:text="#{text.confirm.accion}"></h5>
+			        		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          			<span aria-hidden="true">&times;</span>
+			        		</button>
+			      		</div>
+			      		<div class="modal-body">
+			      			<span th:text="#{text.confirm.fuente.alta}"></span>
+			      		</div>
+			      		<div class="modal-footer">
+			        		<button type="button" class="btn btn-danger" data-dismiss="modal" th:text="#{text.confirm.no}"></button>
+			        		<button type="submit" form="formFueAlta" class="btn btn-success" name="alta" id="alta" th:text="#{text.confirm.si}"></button>
+			      		</div>
+			    	</div>
+			 	</div>
+			</div>
+		</div>
+		
+		<footer th:replace="layout/layout :: footer"></footer>
+		<script th:replace="utils/js/admin/gestionar-fuentes :: javascript"></script>
+
+	</body>
+</html>

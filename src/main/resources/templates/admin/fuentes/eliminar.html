@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head th:replace="layout/layout :: head"></head>
+
+	<body>
+	
+		<header th:replace="layout/layout :: header"></header>
+
+		<hr class="w-75">
+		
+		<div class="container mb-4">
+			<div class="row">
+				<div class="col-6 mb-3">
+					<a th:href="@{/admin/fuentes}"
+						class="btn btn-secondary btn-sm" th:utext="'&laquo; ' + #{text.boton.volver.fuentes}"></a>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col offset-1 mt-4">
+					<p class="text-justify" th:text="#{text.admin.fuentes.acciones.eliminar.intro}"></p>
+				</div>
+			</div>
+			<div class="row mt-4 mb-4 justify-content-center">
+				<div class="col-8 mb-4">
+					<div class="mi-formulario card">
+						<div class="card-header" style="background: linear-gradient(90deg, rgba(120,168,226,1) 0%, rgba(248,249,250,1) 100%);">
+							<div class="row">
+								<div class="col my-2">
+									<!-- <p th:text="${tituloHeader}" class="font-weight-bold my-1 h6"></p> -->
+								</div>
+							</div>
+						 </div>
+						<div class="card-body bg-light">
+						
+						<!-- Para mostrar todos los errores de validacion juntos -->
+						<div th:object="${fuenteForm}" th:remove="tag">
+							<!-- remove 'tag' -> para que no aparezca el contenedor en el HTML -->
+							<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+								<li th:each="err: ${#fields.errors('*')}" th:text="${err}"></li>
+							</ul>
+						</div>
+				
+							<form th:action="@{/admin/fuentes/eliminar/form}" th:object="${fuenteForm}" method="post" id="formFueEliminar">
+								
+								<input type="hidden" th:value="E" name="tpAccion" id="tpAccion"/>
+								
+								<div class="row mt-4">
+									
+									<div class="form-group col-4">
+										<div class="custom-control custom-radio">
+											<input type="radio" name="censo" value="censo" id="chkCenso" class="custom-control-input" th:field="*{tipo}" th:errorclass="'border border-danger'" onclick="gestionarFuentes('C')">
+											<label for="chkCenso" class="custom-control-label" th:text="#{text.form.tpfuente.censo}"></label>
+										</div>
+										<small class="form-text text-muted font-italic" th:text="#{text.admin.form.desc.censo}"></small>
+									</div>
+
+									<div class="form-group col-3">
+										<label for="selectTpsCenso" th:text="#{text.form.tpcenso} + ':'"></label>
+										<div class="col">
+											<select id="selectTpsCenso" th:field="*{subtipo}" class="form-control selectpicker" data-live-search="true" data-size="5" th:errorclass="'border border-danger'" onchange="getCensoAnioLst()">
+												<!-- <option value="-1"></option> -->
+												<option value="derecho" th:text="#{text.form.tpcenso.derecho}"></option>	
+												<option value="hecho" th:text="#{text.form.tpcenso.hecho}"></option>	
+											</select>
+											<small th:if="${#fields.hasErrors('subtipo')}" th:errors="*{subtipo}" class="form-text text-danger"></small>
+										</div>
+										<small class="form-text text-muted font-italic" th:text="#{text.admin.form.desc.tpcenso}"></small>
+									</div>
+									
+									
+									<div class="form-group col-3 offset-1">
+										<label for="anioC" th:text="#{text.form.anio} + ':'"></label>
+										<div class="col">
+											<select id="anioC" th:field="*{anioC}" class="form-control selectpicker" data-live-search="true" data-live-search-style="startsWith" data-size="5" th:errorclass="'border border-danger'">
+												<!-- <option value="-1"></option> -->	
+												<!-- <option th:each="cen: ${selectCenAnios}" th:text="${cen.anio}" th:value="${cen.anio}"></option> -->
+											</select>
+											<small th:if="${#fields.hasErrors('anioC')}" th:errors="*{anioC}" class="form-text text-danger"></small>
+										</div>
+										<small class="form-text text-muted font-italic" th:text="#{text.admin.form.desc.anio}"></small>
+									</div>
+						
+								</div>
+								
+								<hr class="w-50">
+								
+								<div class="row mt-4">
+									
+									<div class="form-group col-4">
+										<div class="custom-control custom-radio">
+											<input type="radio" name="padron" value="padron" id="chkPadron" class="custom-control-input" th:field="*{tipo}" th:errorclass="'border border-danger'" onclick="gestionarFuentes('P')">
+											<label for="chkPadron" class="custom-control-label" th:text="#{text.form.tpfuente.padron}"></label>
+										</div>
+										<small class="form-text text-muted font-italic" th:text="#{text.admin.form.desc.padron}"></small>
+									</div>
+								
+									<div class="form-group col-3">
+										<label for="anioP" th:text="#{text.form.anio} + ':'"></label>
+										<div class="col">
+											<select disabled id="anioP" th:field="*{anioP}" class="form-control selectpicker" data-live-search="true" data-live-search-style="startsWith" data-size="5" th:errorclass="'border border-danger'">
+												<!-- <option value="-1"></option> -->	
+												<!-- <option th:each="pad: ${selectPadAnios}" th:text="${pad.anio}" th:value="${pad.anio}"></option> -->
+											</select>
+											<small th:if="${#fields.hasErrors('anioP')}" th:errors="*{anioP}" class="form-text text-danger"></small>
+										</div>
+										<small class="form-text text-muted font-italic" th:text="#{text.admin.form.desc.anio}"></small>
+									</div>
+									
+								</div>
+								
+								
+								
+								<div class="row mt-4 justify-content-center"> 
+									<div class="form-group col-3">
+										<input type="submit" name="confirmFueEliminar" id="confirmFueEliminar" th:value="#{text.boton.eliminar}"
+												class="btn btn-secondary btn-md btn-block" style="text-align: center;" />
+									</div>
+								</div>
+
+							</form>
+							
+						</div>	
+					</div>
+				</div>
+			</div>
+			
+			<!-- Modal -->
+			<div class="modal fade" id="modalFueEliminar" tabindex="-1" role="dialog" aria-labelledby="modalFueEliminarAccionTitle" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+			    	<div class="modal-content"> 
+			      		<div class="modal-header">
+			        		<h5 class="modal-title" id="modalFueEliminarLongTitle" th:text="#{text.confirm.accion}"></h5>
+			        		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          			<span aria-hidden="true">&times;</span>
+			        		</button>
+			      		</div>
+			      		<div class="modal-body">
+			        		<span th:text="#{text.confirm.fuente.eliminar}"></span>
+			      		</div>
+			      		<div class="modal-footer">
+			        		<button type="button" class="btn btn-danger" data-dismiss="modal" th:text="#{text.confirm.no}"></button>
+			        		<button type="submit" form="formFueEliminar" class="btn btn-success" name="eliminar" id="eliminar" th:text="#{text.confirm.si}"></button>
+			      		</div>
+			    	</div>
+			 	</div>
+			</div>
+		</div>
+		
+		<footer th:replace="layout/layout :: footer"></footer>
+		<script th:replace="utils/js/admin/gestionar-fuentes :: javascript"></script>
+
+	</body>
+</html>

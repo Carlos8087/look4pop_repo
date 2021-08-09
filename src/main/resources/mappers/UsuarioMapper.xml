@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tfg.look4pop.web.app.models.mapper.IUsuarioMapper">
+	
+	<!-- Select Usuario By Id -->
+	<select id="getUsuarioById" parameterType="java.lang.Integer" resultType="Usuario">
+		SELECT * 
+		FROM users
+		WHERE id = #{id}
+	</select>
+	
+	<!-- Select Usuario By Username -->
+	<select id="getUsuarioByUsername" parameterType="java.lang.String" resultType="Usuario">
+		SELECT * 
+		FROM users
+		WHERE username = #{username}
+	</select>
+	
+	<!-- Select Usuarios -->
+	<select id="getUsuarioLst" resultType="Usuario">
+		SELECT * 
+		FROM users
+	</select>
+	
+	<!-- Insert Usuario -->
+	<insert id="insert" parameterType="usuario">
+		INSERT INTO users
+			(username, password, nbregtro, fhregtro)
+		VALUES
+			(#{username}, #{password}, #{nbregtro}, LOCALTIMESTAMP)
+	</insert>
+	
+	<!-- Update Usuario -->
+	<update id="update" parameterType="usuario">
+		UPDATE users SET
+			username = #{username},
+			password = #{password},
+			enabled = #{enabled},
+			nblogact = #{nblogact},
+			fhultact = LOCALTIMESTAMP
+		WHERE
+			id = #{id}
+	</update>
+	
+	<!-- Delete Usuario -->
+	<delete id="delete" parameterType="usuario">
+		DELETE FROM users
+		WHERE
+			id = #{id}
+	</delete>
+	
+</mapper>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+  xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:dwr="http://www.directwebremoting.org/schema/spring-dwr"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+    http://www.directwebremoting.org/schema/spring-dwr
+    http://www.directwebremoting.org/schema/spring-dwr-3.0.xsd">
+    
+    <!-- Scans the Spring context and adds DWR creator proxies for beans annotated with @RemoteProxy -->
+    <dwr:annotation-config />
+    
+    <!-- Scans the classpath and adds DWR converters for all beans annotated with @DataTransferObject -->
+ 	<dwr:annotation-scan base-package="com.tfg.look4pop.web.app" scanDataTransferObject="true" scanRemoteProxy="true" />
+    
+</beans>

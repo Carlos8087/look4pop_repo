@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tfg.look4pop.web.app.models.mapper.IFuenteMapper">
+
+	<resultMap id="fuenteMap" type="Fuente">
+        <id property="tipo" column="tipo"/>
+        <id property="subtipo" column="subtipo"/>
+        <id property="anio" column="año"/>
+        <id property="procedenciaDatos" column="procedencia_datos"/>
+    </resultMap>
+	
+	<!-- Select censo fuentes by tipo de censo -->
+	<!-- <select id="getFuenteCensoByTpCensoLst" parameterType="java.lang.String" resultMap="fuenteMap"> -->
+	<select id="getFuenteCensoByTipoLst" parameterType="java.lang.String" resultMap="fuenteMap">
+		SELECT * 
+		FROM fuente
+		WHERE tipo = 'censo' 
+		AND subtipo = #{tpCenso}
+	</select>
+	
+	<!-- Select padron fuentes -->
+	<!-- <select id="getFuentePadronLst" resultType="Fuente"> -->
+	<select id="getFuentePadronLst" resultMap="fuenteMap">
+		SELECT * 
+		FROM fuente
+		WHERE tipo = 'padron' 
+	</select>
+	
+	<!-- Select Anio By Tipo fuente -->
+	<select id="getAnioByTpFuente" parameterType="fuenteFormDto" resultMap="fuenteMap">
+		SELECT * 
+		FROM fuente
+		
+		<if test='( ("censo".equals(tipo)) 
+			and ("derecho".equals(subtipo)) )'>
+			WHERE tipo = 'censo'
+			AND subtipo = 'derecho'
+			AND año = #{anioC}
+		</if>
+		
+		<if test='( ("censo".equals(tipo)) 
+			and ("hecho".equals(subtipo)) )'>
+			WHERE tipo = 'censo'
+			AND subtipo = 'hecho'
+			AND año = #{anioC}
+		</if>
+		<if test='"padron".equals(tipo)'>
+			WHERE tipo = 'padron'
+			AND año = #{anioP}
+		</if>
+		
+	</select>
+	
+	<!-- Insert Fuente -->
+	<insert id="insert" parameterType="fuente">
+		INSERT INTO fuente
+			(tipo, subtipo, año)
+		VALUES
+			(#{tipo}, #{subtipo}, #{anio})
+	</insert>
+	
+	<!-- Delete Fuente -->
+	<delete id="delete" parameterType="fuente">
+		DELETE FROM fuente
+		WHERE tipo = #{tipo}
+		
+		<if test='subtipo == null'>
+			AND ( (subtipo IS NULL) OR (subtipo = '') )
+		</if>
+		<if test='subtipo != null'>
+			AND subtipo = #{subtipo}
+		</if>
+		
+		AND año = #{anio}
+	</delete>
+	
+</mapper>

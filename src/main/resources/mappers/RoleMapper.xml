@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tfg.look4pop.web.app.models.mapper.IRoleMapper">
+	
+	<!-- Insert Role -->
+	<insert id="insert" parameterType="role">
+		INSERT INTO authorities
+		(user_id, authority, nbregtro, fhregtro)
+		VALUES
+		(#{userId}, #{authority}, #{nbregtro}, LOCALTIMESTAMP)
+	</insert>
+	
+</mapper>
