@@ -25,10 +25,10 @@ public class PdfDocumentHeader extends PdfPageEventHelper {
 		
 		Chunk imageESI = null, imageL4P = null;
 		try {
-			//imageESI = new Chunk(Image.getInstance("/images/esi-uclm.png"), 120, -50);
-			//imageL4P = new Chunk(Image.getInstance("/images/logo.png"), 5, -67);
-			imageESI = new Chunk(Image.getInstance("/app/pdfresources/esi-uclm-topdf.png"), 120, -50);
-			imageL4P = new Chunk(Image.getInstance("/app/pdfresources/logo-topdf.png"), 5, -67);
+			imageESI = new Chunk(Image.getInstance("/images/esi-uclm-topdf.png"), 120, -50);
+			imageL4P = new Chunk(Image.getInstance("/images/logo-topdf.png"), 5, -67);
+			//imageESI = new Chunk(Image.getInstance("/app/pdfresources/esi-uclm-topdf.png"), 120, -50);
+			//imageL4P = new Chunk(Image.getInstance("/app/pdfresources/logo-topdf.png"), 5, -67);
 		} catch (BadElementException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
