@@ -531,13 +531,6 @@ public class ConsultaController {
 		
 		try {
 			
-			// Registros a mostrar en pantalla
-			/*
-			poblacionData = poblacionDataAll.stream().limit(consultaForm.getNumElementAct() + consultaForm.getNumMaxRegs())
-						.collect(Collectors.toList());
-			consultaForm.setNumElementAct(poblacionData.size());
-			*/
-			
 			poblacionData = poblacionDataAll;
 			consultaForm.setNumElementAct(poblacionData.size());
 			
@@ -609,7 +602,6 @@ public class ConsultaController {
 		
 		List<String> ambParLst = new ArrayList<String>();
 		List<String> tpFuenteLst = new ArrayList<String>();
-		//List<String> tpCensoLst = new ArrayList<String>();
 		List<String> censoDerAnioLst = new ArrayList<String>();
 		List<String> censoHecAnioLst = new ArrayList<String>();
 		List<String> padronAnioLst = new ArrayList<String>();

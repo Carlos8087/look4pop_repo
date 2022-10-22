@@ -25,10 +25,12 @@ public class PdfDocumentHeader extends PdfPageEventHelper {
 		
 		Chunk imageESI = null, imageL4P = null;
 		try {
-			imageESI = new Chunk(Image.getInstance("/images/esi-uclm-topdf.png"), 120, -50);
-			imageL4P = new Chunk(Image.getInstance("/images/logo-topdf.png"), 5, -67);
-			//imageESI = new Chunk(Image.getInstance("/app/pdfresources/esi-uclm-topdf.png"), 120, -50);
-			//imageL4P = new Chunk(Image.getInstance("/app/pdfresources/logo-topdf.png"), 5, -67);
+			imageESI = new Chunk(Image.getInstance("/images/esi-uclm_topdf.png"), 203, -35);
+			imageL4P = new Chunk(Image.getInstance("/images/logo_topdf.png"), 5, -67);
+			// TO_PRO
+			//imageESI = new Chunk(Image.getInstance("/app/pdfresources/esi-uclm_topdf.png"), 203, -35);
+			//imageL4P = new Chunk(Image.getInstance("/app/pdfresources/logo_topdf.png"), 5, -67);
+		
 		} catch (BadElementException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -43,7 +45,7 @@ public class PdfDocumentHeader extends PdfPageEventHelper {
 	    
 		//String header = "LOOK4POP                                                                                                  Carlos Sánchez Martín";
 	    String header = "Carlos Sánchez Martín";
-		Font font = new Font(Font.HELVETICA, 12, Font.BOLDITALIC);
+		Font font = new Font(Font.HELVETICA, 8, Font.BOLDITALIC);
 		Phrase headerPhrase = new Phrase(header, font);
 		ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_LEFT, 
 		        headerPhrase, 440,
