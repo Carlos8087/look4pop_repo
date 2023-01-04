@@ -42,8 +42,6 @@ public class PoblacionCsvView extends AbstractView {
 		// Asignamos el 'tipo de contenido'
 		response.setContentType(getContentType());
 		
-		//List<PoblacionDataDTO> poblacionDataLst = (List<PoblacionDataDTO>) model.get("poblacionData");
-		
 		Gson gson = new Gson();
 		
 		Type collectionType = new TypeToken<Collection<PoblacionDataDTO>>(){}.getType();
@@ -53,7 +51,6 @@ public class PoblacionCsvView extends AbstractView {
 		ICsvBeanWriter beanWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.EXCEL_NORTH_EUROPE_PREFERENCE);
 		
 		// Header del fichero
-		// String[] header = {"tipoTerritorio", "nombre", "codigoOficial", "tipoFuente", "subtipoFuente", "anio", "poblacion"}; // Los nombres definidos deben coincidir con los nombres de los atributos
 		String[] header = {"tipoTerritorio", "nombre", "codigoOficial", "tipoFuente", "anio", "poblacion"}; // Los nombres definidos deben coincidir con los nombres de los atributos
 		beanWriter.writeHeader(header);
 		
@@ -62,6 +59,11 @@ public class PoblacionCsvView extends AbstractView {
 		}
 		
 		beanWriter.close();
+	}
+	
+	public void exportCsvTest(Map<String, Object> model, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		this.renderMergedOutputModel(model, request, response);
 	}
 
 }

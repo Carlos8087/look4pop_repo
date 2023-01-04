@@ -40,17 +40,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tfg.look4pop.web.app.constants.Look4PopConstants;
 import com.tfg.look4pop.web.app.models.dto.ConsultaFormDTO;
 import com.tfg.look4pop.web.app.models.dto.ConsultaFormDescripcionDTO;
-import com.tfg.look4pop.web.app.models.dto.FuenteFormDTO;
 import com.tfg.look4pop.web.app.models.dto.PoblacionDataDTO;
 import com.tfg.look4pop.web.app.models.entity.Fuente;
 import com.tfg.look4pop.web.app.models.entity.Territorio;
@@ -202,25 +198,12 @@ public class ConsultaController {
 		return "redirect:/consulta/listar";
 	}
 	
-	// Descarga formulario de consulta	
-	//@PostMapping(path = "/form", params = "descargar")
-	//public Object descargarConsulta(@Valid @ModelAttribute("consultaForm") ConsultaFormDTO consultaForm, BindingResult result, Model model, Locale locale, HttpServletRequest request) throws IOException {
-	//@GetMapping("/form/guardar")
-	//@PostMapping(path = "/form", params = "guardar", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PostMapping(path = "/form", params = "guardar")
 	public Object guardarConsulta(@ModelAttribute("consultaForm") ConsultaFormDTO consultaForm, @RequestParam(value = "descripcion", required = false) String descripcion, Model model, Locale locale, HttpServletRequest request) throws IOException {
 					
 		String error = null;
 		Resource resource = null;
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-		
-		/*
-		if (result.hasErrors()) { // Si el formulario contiene errores de validacion...
-			model.addAttribute("tituloPagina", messageSource.getMessage("text.page.listar.title", null, locale));
-			utilidadesService.activarOpcionMenu(model, 2);
-			return "consulta/listar";
-		}
-		*/
 		
 		try {
 		
@@ -262,8 +245,6 @@ public class ConsultaController {
 	//@GetMapping("/form/modificar")
 	@PostMapping(path = "/form", params = "modificar")
 	public Object modificarConsulta(@ModelAttribute("consultaForm") ConsultaFormDTO consultaForm, Model model, Locale locale, HttpServletRequest request) throws IOException {
-		//ConsultaFormDTO consultaForm = new ConsultaFormDTO();
-		
 		List<String> aniosSelec = new ArrayList<String>();
 		
 		// Censo de derecho
@@ -300,6 +281,7 @@ public class ConsultaController {
 		
 		return "consulta/form";
 	}
+	
 	// Listar
 	@GetMapping("/listar")
 	public String listarResultados(Model model, Locale locale, HttpServletRequest request) {
@@ -337,9 +319,6 @@ public class ConsultaController {
 		model.addAttribute("consultaForm", consultaForm);
 		model.addAttribute("consultaFormDesc", consultaFormDesc);
 		model.addAttribute("poblacionData", poblacionData);
-	
-		
-		//model.addAttribute("desPepito", "holaaaaaaa");
 			
 		success = messageSource.getMessage("text.resultados.listar.ok.1", null, locale) + " " + poblacionData.size() + " " + messageSource.getMessage("text.resultados.listar.ok.2", null, locale) + " " + consultaForm.getNumTotRegs();
 		model.addAttribute("success", success);
@@ -347,79 +326,51 @@ public class ConsultaController {
 		return "consulta/listar";
 	}
 	
-	
 	// Listar
-		@PostMapping("/listar")
-		public String listarResultadosExport(Model model, Locale locale, HttpServletRequest request, @RequestParam(value = "desPepito", required = false) String desPepito, @RequestParam(value = "datos", required = false) String datos) {
+	@PostMapping("/listar")
+	public String listarResultadosExport(Model model, Locale locale, HttpServletRequest request, @RequestParam(value = "desPepito", required = false) String desPepito, @RequestParam(value = "datos", required = false) String datos) {
 			
-			String error = null;
-			String success = null;
+		String error = null;
+		String success = null;
+		
+		ConsultaFormDTO consultaForm = (ConsultaFormDTO) request.getSession().getAttribute("consultaForm");
+		ConsultaFormDescripcionDTO consultaFormDesc = (ConsultaFormDescripcionDTO) request.getSession().getAttribute("consultaFormDesc");
+		List<PoblacionDataDTO> poblacionDataAll = (List<PoblacionDataDTO>) request.getSession().getAttribute("poblacionDataAll");
+		
+		List<PoblacionDataDTO> poblacionData = new ArrayList<PoblacionDataDTO>();
+		
+		try {
 			
-			ConsultaFormDTO consultaForm = (ConsultaFormDTO) request.getSession().getAttribute("consultaForm");
-			ConsultaFormDescripcionDTO consultaFormDesc = (ConsultaFormDescripcionDTO) request.getSession().getAttribute("consultaFormDesc");
-			List<PoblacionDataDTO> poblacionDataAll = (List<PoblacionDataDTO>) request.getSession().getAttribute("poblacionDataAll");
+			// Registros a mostrar en pantalla
+			poblacionData = poblacionDataAll.stream().limit(consultaForm.getNumElementAct())
+						.collect(Collectors.toList());
 			
-			List<PoblacionDataDTO> poblacionData = new ArrayList<PoblacionDataDTO>();
+			LOGGER.info("Total registros devueltos por la consulta: " + poblacionDataAll.size());
+			LOGGER.info("Total registros a mostrar en pantalla: " + poblacionData.size());	
 			
-			try {
-				
-				// Registros a mostrar en pantalla
-				poblacionData = poblacionDataAll.stream().limit(consultaForm.getNumElementAct())
-							.collect(Collectors.toList());
-				
-				LOGGER.info("Total registros devueltos por la consulta: " + poblacionDataAll.size());
-				LOGGER.info("Total registros a mostrar en pantalla: " + poblacionData.size());	
-				
-			} catch (Exception e) {
-				error = messageSource.getMessage("text.consulta.error.3", null, locale);
-				model.addAttribute("error", error);
-				model.addAttribute("tituloPagina", messageSource.getMessage("text.page.consulta.title", null, locale));
-				utilidadesService.activarOpcionMenu(model, 2);
-				LOGGER.info("Ha ocurrido durante el listado de los resultados");
-				return "consulta/form";
-			}
-			
-			model.addAttribute("tituloPagina", messageSource.getMessage("text.page.listar.title", null, locale));
+		} catch (Exception e) {
+			error = messageSource.getMessage("text.consulta.error.3", null, locale);
+			model.addAttribute("error", error);
+			model.addAttribute("tituloPagina", messageSource.getMessage("text.page.consulta.title", null, locale));
 			utilidadesService.activarOpcionMenu(model, 2);
-			
-			model.addAttribute("consultaForm", consultaForm);
-			model.addAttribute("consultaFormDesc", consultaFormDesc);
-			model.addAttribute("poblacionData", poblacionData);
-			model.addAttribute("desPepito", desPepito);
-			model.addAttribute("datos", datos);
-			
-			//model.addAttribute("desPepito", "holaaaaaaa");
-				
-			success = messageSource.getMessage("text.resultados.listar.ok.1", null, locale) + " " + poblacionData.size() + " " + messageSource.getMessage("text.resultados.listar.ok.2", null, locale) + " " + consultaForm.getNumTotRegs();
-			model.addAttribute("success", success);
-			LOGGER.info("Resultados mostrados correctamente");
-			return "consulta/listar";
+			LOGGER.info("Ha ocurrido durante el listado de los resultados");
+			return "consulta/form";
 		}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+		
+		model.addAttribute("tituloPagina", messageSource.getMessage("text.page.listar.title", null, locale));
+		utilidadesService.activarOpcionMenu(model, 2);
+		
+		model.addAttribute("consultaForm", consultaForm);
+		model.addAttribute("consultaFormDesc", consultaFormDesc);
+		model.addAttribute("poblacionData", poblacionData);
+		model.addAttribute("desPepito", desPepito);
+		model.addAttribute("datos", datos);
+			
+		success = messageSource.getMessage("text.resultados.listar.ok.1", null, locale) + " " + poblacionData.size() + " " + messageSource.getMessage("text.resultados.listar.ok.2", null, locale) + " " + consultaForm.getNumTotRegs();
+		model.addAttribute("success", success);
+		LOGGER.info("Resultados mostrados correctamente");
+		return "consulta/listar";
+	}
 	
 	// Upload del fichero de consulta
 	@PostMapping("/upload")
@@ -456,7 +407,6 @@ public class ConsultaController {
 			String uniqueFileNameId = UUID.randomUUID().toString() 
 					+ "_" + dateFormat.format(new Date()) + "_upload_queryForm.csv";
 				
-			//Path path = Paths.get("C://app//queryforms//uploads//" + uniqueFileNameId);
 			Path path = Paths.get(pathFormUploads + uniqueFileNameId);
 
 			Files.copy(file.getInputStream(), path);
@@ -471,12 +421,10 @@ public class ConsultaController {
 			consultaForm.setNumElementAct(0);
 			consultaForm.setNumMaxRegs(sqlMaxRegs);
 			LOGGER.info("Límite máximo registros a mostrar (por defecto): " + sqlMaxRegs);
-			
-			// Se gestionan los anios seleccionados
-			// gestionarAniosConsulta(consultaForm);
 					
 			List<PoblacionDataDTO> poblacionDataAll = new ArrayList<PoblacionDataDTO>(); 
 			List<PoblacionDataDTO> poblacionData = new ArrayList<PoblacionDataDTO>(); 
+			
 			// Dependiendo del nivel de detalle seleccionado, la consulta se gestiona de una u otra manera
 			if (Look4PopConstants.TP_TERRITORIO_MUNICIPIO.equals(consultaForm.getNivel())) {
 				// Nivel 'Municipio'
@@ -593,7 +541,6 @@ public class ConsultaController {
 		consultaForm.setCensoDerAnios(censoDerAnioLst.toArray(new String[censoDerAnioLst.size()]));
 		consultaForm.setCensoHecAnios(censoHecAnioLst.toArray(new String[censoHecAnioLst.size()]));
 		consultaForm.setPadronAnios(padronAnioLst.toArray(new String[padronAnioLst.size()]));
-			
 	}
 	
 	private ConsultaFormDTO obtenerParamsConsulta(List<String> lineas) {
@@ -638,14 +585,6 @@ public class ConsultaController {
 						tpFuenteLst.add(tpFuente);
 					}
 				break;
-				/*
-				case 5:
-					String tpCenso = st.nextToken().trim();
-					if (!StringUtils.isEmpty(tpCenso)) {
-						tpCensoLst.add(tpCenso);
-					}
-				break;
-				*/
 				case 5:
 					String censoDerAnio = st.nextToken().trim();
 					if (!StringUtils.isEmpty(censoDerAnio)) {
@@ -668,11 +607,8 @@ public class ConsultaController {
 		}	
 		
 		// Poblamos el objeto contenedor con los correspondientes parametros
-		
-		
 		consultaForm.setAmbitosPar(ambParLst.toArray(new String[ambParLst.size()]));
 		consultaForm.setTpsFuente(tpFuenteLst.toArray(new String[tpFuenteLst.size()]));
-		// consultaForm.setTpsCenso(tpCensoLst.toArray(new String[tpCensoLst.size()]));
 		consultaForm.setCensoDerAnios(censoDerAnioLst.toArray(new String[censoDerAnioLst.size()]));
 		consultaForm.setCensoHecAnios(censoHecAnioLst.toArray(new String[censoHecAnioLst.size()]));
 		consultaForm.setPadronAnios(padronAnioLst.toArray(new String[padronAnioLst.size()]));
@@ -737,20 +673,6 @@ public class ConsultaController {
 			lineasTpFuente[0] = lineaTpFuenteId + " ";
 		}
 		
-		/*
-		// Lineas 'Tipo de censo'
-		String[] lineasTpCenso = null;		
-		if ((null != consultaForm.getTpsCenso()) && (consultaForm.getTpsCenso().length > 0)) {
-			lineasTpCenso = new String[consultaForm.getTpsCenso().length];
-			for (int i = 0; i < consultaForm.getTpsCenso().length; i++) {
-				lineasTpCenso[i] = lineaTpCensoId + consultaForm.getTpsCenso()[i];
-			}
-		} else {
-			lineasTpCenso = new String[1];
-			lineasTpCenso[0] = lineaTpCensoId + " ";
-		}
-		*/
-		
 		// Lineas 'Censo Derecho Anio'
 		String[] lineasCensoDerAnio = null;		
 		if ((null != consultaForm.getCensoDerAnios()) && (consultaForm.getCensoDerAnios().length > 0)) {
@@ -799,12 +721,6 @@ public class ConsultaController {
 		for (int i = 0; i < lineasTpFuente.length; i++) {
 			lineas.add(lineasTpFuente[i]);
 		}
-		
-		/*
-		for (int i = 0; i < lineasTpCenso.length; i++) {
-			lineas.add(lineasTpCenso[i]);
-		}
-		*/
 		
 		for (int i = 0; i < lineasCensoDerAnio.length; i++) {
 			lineas.add(lineasCensoDerAnio[i]);
@@ -935,13 +851,6 @@ public class ConsultaController {
 	public List<Territorio> getTerritorioAmbitoParLst(String nivel, String ambitoGen) {
 		return territorioService.getTerritorioAmbitoParLst(nivel, ambitoGen);
 	}
-		
-	/*
-	@RemoteMethod
-	public List<Fuente> getFuenteCensoByTpCensoLst(String tpCenso) {
-		return fuenteService.getFuenteCensoByTpCensoLst(tpCenso);
-	}
-	*/
 	
 	@RemoteMethod
 	public List<Fuente> getFuenteCensoByTipoLst(String tpCenso) {
@@ -1029,36 +938,6 @@ public class ConsultaController {
 			
 			model.addAttribute("selectAnios", fuenteFormatLst);	
 		}
-			
-		
-		
-		/*	
-		// Carga fuentes censos (segun tipo) y padrones
-		if (!StringUtils.isEmpty(consultaForm.getTpsFuente())) {
-			List<String> tpsFuenteLst = Arrays.asList(consultaForm.getTpsFuente());
-				
-			// Censo
-			if (tpsFuenteLst.contains("censo")) {
-				if (!StringUtils.isEmpty(consultaForm.getTpsCenso())) {
-					List<String> tpsCensoLst = Arrays.asList(consultaForm.getTpsCenso());
-					
-					// Censo de 'Derecho'
-					if (tpsCensoLst.contains("derecho")) {
-						model.addAttribute("selectCensoDerechoAnios", fuenteService.getFuenteCensoByTpCensoLst("derecho"));
-					}
-					// Censo de 'Hecho'
-					if (tpsCensoLst.contains("hecho")) {
-						model.addAttribute("selectCensoHechoAnios", fuenteService.getFuenteCensoByTpCensoLst("hecho"));
-					}
-				}
-			}
-				
-			// Padron
-			if (tpsFuenteLst.contains("padron")) {
-				model.addAttribute("selectPadronAnios", fuenteService.getFuentePadronLst());
-			}
-		}
-		*/
 			
 	}		
 

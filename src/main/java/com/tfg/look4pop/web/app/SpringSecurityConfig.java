@@ -27,7 +27,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configurerGlobal(AuthenticationManagerBuilder builder) throws Exception {
 		
 		// Autenticacion 'EN MEMORIA'
-		
 		/*
 		PasswordEncoder encoder = this.passwordEncoder;
 		
@@ -42,21 +41,17 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 															  				// Cuando se invoca este metodo, automaticamente el user builder va a codificar la contraseña
 		*/
 		
-		
 		// Autenticacion usando JDBC. Conexion a bbdd MySQL)
 		builder.jdbcAuthentication()
 			.dataSource(dataSource)
 			.passwordEncoder(passwordEncoder)
 			.usersByUsernameQuery("select username, password, enabled from users where username=?")
 			.authoritiesByUsernameQuery("select u.username, a.authority from authorities a inner join users u on (a.user_id=u.id) where u.username=?");
-		
-		
 	}
 
 	// Gestion de autorizaciones hacia las rutas, recursos, ...
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		
 		http
 		.csrf().disable()
 		.authorizeRequests().antMatchers("/", "/index", "/consulta/**", "/locale/**", "/css/**", "/dwr/**", "/images/**", "/js/**").permitAll() // Permiso hacia rutas / recursos publicos
@@ -72,7 +67,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 		.exceptionHandling().accessDeniedPage("/error_403"); // Misma ruta que la definida en la clase 'MvcConfig'
 		
 		// Cuando no se tienen permisos, se redirege automaticamente al formulario de login que provee Spring Security (http://localhost:8080/login)
-		
 	}
 	
 }

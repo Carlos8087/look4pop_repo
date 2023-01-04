@@ -9,20 +9,4 @@ public interface IPoblacionMapper {
 	
 	public List<PoblacionDataDTO> getPoblacionByMunicipioLst(ConsultaFormDTO consultaForm);
 	public List<PoblacionDataDTO> getPoblacionLst(ConsultaFormDTO consultaForm);
-	
-	/*
-	public List<Futbolista> listar();
-	public List<Futbolista> listarConLimites(MainFormDTO mainForm);
-	
-	public Futbolista getFutbolistaById(Integer id);
-	
-	// Combos dependientes
-	public List<Futbolista> getAllFutbolistas();
-	public List<Coche> getAllCochesByFutbolista(Integer id);
-	public List<Color> getAllColoresByCoche(Integer id);
-	
-	// Formulario
-	public List<FutbolistaDataDTO> getFutbolistasByFormParams(MainFormDTO mainForm);
-	*/
-
 }

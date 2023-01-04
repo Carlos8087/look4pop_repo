@@ -9,5 +9,4 @@ public interface IPoblacionService {
 	
 	public List<PoblacionDataDTO> getPoblacionByMunicipioLst(ConsultaFormDTO consultaForm);
 	public List<PoblacionDataDTO> getPoblacionLst(ConsultaFormDTO consultaForm);
-
 }

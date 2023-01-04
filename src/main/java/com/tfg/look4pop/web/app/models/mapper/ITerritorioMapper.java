@@ -14,5 +14,4 @@ public interface ITerritorioMapper {
 	public List<String> getTerritorioIdByNivelAndAmbitoGenLst(@Param("params") Map<String, String> params);
 	public List<Territorio> getTerritorioAmbitoParLst(List<String> territorioIdLst);
 	public Integer[] getTerritorioIdIncludedInAmbitoGenLst(ConsultaFormDTO consultaForm);
-
 }

@@ -102,7 +102,6 @@ public class AdminController {
 			String uniqueFileNameId = UUID.randomUUID().toString() 
 					+ "_" + dateFormat.format(new Date()) + "_script_bbdd.csv";
 				
-			//Path path = Paths.get("C://app//admin//scriptsbd//" + uniqueFileNameId);
 			Path path = Paths.get(pathScriptsBd + uniqueFileNameId);
 
 			Files.copy(scriptFile.getInputStream(), path);

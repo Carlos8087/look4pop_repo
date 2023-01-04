@@ -34,6 +34,43 @@ public class Territorio {
 	private Integer y;
 	private Integer capital;
 	private byte activo;
+	
+	public Territorio() {
+	}
+	
+	public Territorio(Integer idTerritorio, String nombreActual, String nombreCortoActual, String tipoTerritorio,
+			String codigoOficial, Integer e, Integer r, Integer p, Integer m, Integer mv, Integer c, Integer au,
+			Integer auv, Integer i, Integer zc, Integer ac, Integer du, Integer pj, Integer zf, Double km2, Double este,
+			Double oeste, Double norte, Double sur, Integer x, Integer y, Integer capital, byte activo) {
+		this.idTerritorio = idTerritorio;
+		this.nombreActual = nombreActual;
+		this.nombreCortoActual = nombreCortoActual;
+		this.tipoTerritorio = tipoTerritorio;
+		this.codigoOficial = codigoOficial;
+		this.e = e;
+		this.r = r;
+		this.p = p;
+		this.m = m;
+		this.mv = mv;
+		this.c = c;
+		this.au = au;
+		this.auv = auv;
+		this.i = i;
+		this.zc = zc;
+		this.ac = ac;
+		this.du = du;
+		this.pj = pj;
+		this.zf = zf;
+		this.km2 = km2;
+		this.este = este;
+		this.oeste = oeste;
+		this.norte = norte;
+		this.sur = sur;
+		this.x = x;
+		this.y = y;
+		this.capital = capital;
+		this.activo = activo;
+	}
 
 	@RemoteProperty
 	public Integer getIdTerritorio() {

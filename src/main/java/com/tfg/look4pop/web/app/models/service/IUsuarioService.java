@@ -12,5 +12,4 @@ public interface IUsuarioService {
 	public Integer insert(Usuario usuario);
 	public Integer update(Usuario usuario);
 	public Integer delete(Usuario usuario);
-
 }

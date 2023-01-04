@@ -2,7 +2,6 @@ package com.tfg.look4pop.web.app.view.pdf;
 
 import java.awt.Color;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -14,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.view.document.AbstractPdfView;
 
@@ -52,16 +50,6 @@ public class PoblacionPdfView extends AbstractPdfView {
 		
 		Type collectionType = new TypeToken<Collection<PoblacionDataDTO>>(){}.getType();
 		List<PoblacionDataDTO> poblacionDataLst = gson.fromJson((String) model.get("datos"), collectionType);
-		
-		
-		
-		
-		
-		//List<PoblacionDataDTO> pd = gson.fromJson((String)model.get("datos"), PoblacionDataDTO.class);
-		
-		//List<PoblacionDataDTO> poblacionDataLst = (List<PoblacionDataDTO>) model.get("poblacionData");
-		//List<PoblacionDataDTO> poblacionDataLst = new ArrayList<PoblacionDataDTO>();
-		//poblacionDataLst.add(pd);
 		
 		Locale locale = localeResolver.resolveLocale(request);		
 		
@@ -166,13 +154,6 @@ public class PoblacionPdfView extends AbstractPdfView {
 		cell.setPhrase(phrase);
 		table.addCell(cell);
 		
-		/*
-		// Subtipo fuente
-		phrase = new Phrase(messageSource.getMessage("text.listar.tabla.subtipoFuente", null, locale), font);
-		cell.setPhrase(phrase);
-		table.addCell(cell);
-		*/
-		
 		// Anio
 		phrase = new Phrase(messageSource.getMessage("text.listar.tabla.anio", null, locale), font);
 		cell.setPhrase(phrase);
@@ -216,13 +197,6 @@ public class PoblacionPdfView extends AbstractPdfView {
 		cell.setPhrase(phrase);
 		table.addCell(cell);
 				
-		/*
-		// Subtipo fuente
-		phrase = new Phrase(poblacionData.getSubtipoFuente(), font);
-		cell.setPhrase(phrase);
-		table.addCell(cell);
-		*/
-				
 		// Anio
 		phrase = new Phrase(poblacionData.getAnio(), font);
 		cell.setPhrase(phrase);
@@ -233,6 +207,14 @@ public class PoblacionPdfView extends AbstractPdfView {
 		cell.setPhrase(phrase);
 		table.addCell(cell);
 		
+	}
+	
+	public void exportPdfTest(Map<String, Object> model, Document document, PdfWriter writer,
+			HttpServletRequest request, HttpServletResponse response, MessageSource messageSource, LocaleResolver localeResolver) throws Exception {
+		this.messageSource = messageSource;
+		this.localeResolver = localeResolver;
+		
+		this.buildPdfDocument(model, document, writer, request, response);
 	}
 
 }

@@ -10,6 +10,16 @@ public class Fuente {
 	private String subtipo;
 	private String anio;
 	private String procedenciaDatos;
+	
+	public Fuente() {
+	}
+
+	public Fuente(String tipo, String subtipo, String anio, String procedenciaDatos) {
+		this.tipo = tipo;
+		this.subtipo = subtipo;
+		this.anio = anio;
+		this.procedenciaDatos = procedenciaDatos;
+	}
 
 	@RemoteProperty
 	public String getTipo() {

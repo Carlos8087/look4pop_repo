@@ -7,7 +7,6 @@ import org.apache.ibatis.annotations.Param;
 
 import com.tfg.look4pop.web.app.models.dto.ConsultaFormDTO;
 import com.tfg.look4pop.web.app.models.entity.Territorio;
-import com.tfg.look4pop.web.app.models.entity.TipoTerritorio;
 
 public interface ITerritorioService {
 	
@@ -15,5 +14,4 @@ public interface ITerritorioService {
 	public List<String> getTerritorioIdByNivelAndAmbitoGenLst(@Param("params") Map<String, String> params);
 	public List<Territorio> getTerritorioAmbitoParLst(String nivel, String ambitoGen);
 	public Integer[] getTerritorioIdIncludedInAmbitoGenLst(ConsultaFormDTO consultaForm);
-
 }

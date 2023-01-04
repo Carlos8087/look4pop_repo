@@ -16,6 +16,21 @@ public class Usuario {
 	private Timestamp fhregtro;
 	private String nblogact;
 	private Timestamp fhultact;
+	
+	public Usuario() {
+	}
+
+	public Usuario(Integer id, String username, String password, Integer enabled, String nbregtro, Timestamp fhregtro,
+			String nblogact, Timestamp fhultact) {
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.enabled = enabled;
+		this.nbregtro = nbregtro;
+		this.fhregtro = fhregtro;
+		this.nblogact = nblogact;
+		this.fhultact = fhultact;
+	}
 
 	@RemoteProperty
 	public Integer getId() {

@@ -10,6 +10,16 @@ public class TipoTerritorio {
 	private String nombre;
 	private String comentarios;
 	private String perteneceA;
+	
+	public TipoTerritorio() {
+	}
+
+	public TipoTerritorio(String idTt, String nombre, String comentarios, String perteneceA) {
+		this.idTt = idTt;
+		this.nombre = nombre;
+		this.comentarios = comentarios;
+		this.perteneceA = perteneceA;
+	}
 
 	@RemoteProperty
 	public String getIdTt() {

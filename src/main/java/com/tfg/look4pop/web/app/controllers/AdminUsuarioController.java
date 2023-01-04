@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.tfg.look4pop.web.app.models.dto.UsuarioFormDTO;
-import com.tfg.look4pop.web.app.models.entity.Fuente;
 import com.tfg.look4pop.web.app.models.entity.Role;
 import com.tfg.look4pop.web.app.models.entity.Usuario;
 import com.tfg.look4pop.web.app.models.service.IRoleService;
@@ -107,19 +106,6 @@ public class AdminUsuarioController {
 		return "admin/usuarios/eliminar";
 	}
 	
-	// Formulario
-	/*
-	@GetMapping("/form")
-	public String getUsuarioForm(Model model, Locale locale, HttpServletRequest request) {
-		UsuarioFormDTO usuarioForm = new UsuarioFormDTO();
-		model.addAttribute("usuarioForm", usuarioForm);
-		model.addAttribute("tituloPagina", messageSource.getMessage("text.page.admin.title", null, locale));
-		utilidadesService.activarOpcionMenu(model, 4);
-		
-		return "admin/usuarios/acciones";
-	}
-	*/
-	
 	// Formulario de alta
 	@GetMapping("/alta/form")
 	public String getUsuarioAltaForm(Model model, Locale locale, HttpServletRequest request) {
@@ -154,7 +140,6 @@ public class AdminUsuarioController {
 	}
 	
 	// Procesamiento formulario de consulta usuario
-	//@PostMapping(path = "/form", params = "alta")
 	@PostMapping("/alta/form")
 	public String procesarAltaUsuario(@Valid @ModelAttribute("usuarioForm") UsuarioFormDTO usuarioForm, BindingResult result, Model model, Locale locale, HttpServletRequest request, Authentication authentication) {
 						
@@ -221,7 +206,6 @@ public class AdminUsuarioController {
 	}
 	
 	// Procesamiento formulario de consulta usuario
-	//@PostMapping(path = "/form", params = "modificar")
 	@PostMapping("/modificar/form")
 	public String procesarModificacionUsuario(@Valid @ModelAttribute("usuarioForm") UsuarioFormDTO usuarioForm, BindingResult result, Model model, Locale locale, HttpServletRequest request, Authentication authentication) {
 							
@@ -280,7 +264,6 @@ public class AdminUsuarioController {
 	}
 	
 	// Procesamiento formulario de consulta usuario
-	//@PostMapping(path = "/form", params = "eliminar")
 	@PostMapping("/eliminar/form")
 	public String procesarEliminacionUsuario(@Valid @ModelAttribute("usuarioForm") UsuarioFormDTO usuarioForm, BindingResult result, Model model, Locale locale, HttpServletRequest request, Authentication authentication) {
 								

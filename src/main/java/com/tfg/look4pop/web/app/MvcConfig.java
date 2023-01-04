@@ -64,25 +64,8 @@ public class MvcConfig implements WebMvcConfigurer {
         // Asynchronously send data from a web-server to a browser
         registrationBean.addInitParameter("activeReverseAjaxEnabled", "true");
         
-        //registrationBean.addInitParameter("allowScriptTagRemoting", "true");
-        //registrationBean.addInitParameter("crossDomainSessionSecurity", "false");
-        
-        // Additional time before closing the connection
-        // registrationBean.addInitParameter("maxWaitAfterWrite", "60");
-        
         return registrationBean;
     }
-	
-	/*
-	// Para realizar conversiones a XML
-	@Bean
-	public Jaxb2Marshaller jaxb2Marshaller() {
-		Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
-		marshaller.setClassesToBeBound(new Class[] {com.tfg.look4pop.web.app.view.xml.PoblacionList.class}); // Conjunto de clases principales 'root' a convertir en XML. Conversor a XML
-			
-		return marshaller;
-	}
-	*/
 	
 	// Para encriptar las contraseñas. Spring Security
 	@Bean // Para registrarlo en el contenedor de Spring

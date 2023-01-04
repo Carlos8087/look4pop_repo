@@ -9,8 +9,6 @@
 			tt.nombre AS tipoTerritorio,
 			te.nombre_actual AS nombre,
 			te.codigo_oficial AS codigoOficial,
-			<!-- tf.tipo AS tipoFuente,
-			IFNULL(tf.subtipo,'') AS subtipoFuente, -->
 			CONCAT(tf.tipo, ' ', IFNULL(tf.subtipo,'')) AS tipoFuente,
 			fu.año AS anio,
 			po.poblacion AS poblacion
@@ -105,62 +103,11 @@
 						OR
 					</if>
 					
-					
-					
-					
-					<!-- 
-					<if test='"censo".equals(itemTpsFuente)'>
-						
-						<foreach collection="tpsCenso" index="indexTpsCenso" item="itemTpsCenso">
-						
-							<if test='"derecho".equals(itemTpsCenso)'>
-								(fu.tipo = 'censo' 
-								AND fu.subtipo = 'derecho'
-								AND fu.año in 
-								<foreach collection="censoDerAnios" index="index" item="item" open="(" separator="," close=")">
-									#{item}       
-								</foreach>
-								)
-							</if>
-								
-							<if test='"hecho".equals(itemTpsCenso)'>
-								(fu.tipo = 'censo' 
-								AND fu.subtipo = 'hecho'
-								AND fu.año in 
-								<foreach collection="censoHecAnios" index="index" item="item" open="(" separator="," close=")">
-									#{item}       
-								</foreach>
-								)
-							</if>
-								
-							<if test="tpsCenso.length - 1 > indexTpsCenso">
-								OR
-							</if>
-								
-						</foreach>
-					</if>
-						
-					<if test='"padron".equals(itemTpsFuente)'>
-						(fu.tipo = 'padron' 
-						AND fu.año in 
-						<foreach collection="padronAnios" index="index" item="item" open="(" separator="," close=")">
-							#{item}       
-						</foreach>
-						)
-					</if>
-						
-					<if test="tpsFuente.length - 1 > indexTpsFuente">
-						OR
-					</if>
-					-->
-						
 				</foreach>
   					
   			</if>
 			
 		)
-		
-        <!-- LIMIT #{elementoIni}, #{numTotRegs} -->
 	
 	</select>
 	
@@ -173,8 +120,6 @@
 				X.TIPOTE AS tipoTerritorio,
 				X.NOMBRE AS nombre,
 				X.CODOFICIAL AS codigoOficial,
-				<!-- Z.TIPO AS tipoFuente,
-				IFNULL(Z.SUBTIPO,'') AS subtipoFuente, -->
 				CONCAT(Z.TIPO, ' ', IFNULL(Z.SUBTIPO,'')) AS tipoFuente,
 				Z.ANIO AS anio,
 				Z.TOTAL_POB AS poblacion
@@ -275,53 +220,6 @@
 								<if test="tpsFuente.length - 1 > indexTpsFuente">
 									OR
 								</if>
-								
-								
-								<!-- 
-								<if test='"censo".equals(itemTpsFuente)'>
-									
-									<foreach collection="tpsCenso" index="indexTpsCenso" item="itemTpsCenso">
-									
-										<if test='"derecho".equals(itemTpsCenso)'>
-											(tipo = 'censo' 
-											AND subtipo = 'derecho'
-											AND año in 
-											<foreach collection="censoDerAnios" index="index" item="item" open="(" separator="," close=")">
-												#{item}       
-											</foreach>
-											)
-										</if>
-											
-										<if test='"hecho".equals(itemTpsCenso)'>
-											(tipo = 'censo' 
-											AND subtipo = 'hecho'
-											AND año in 
-											<foreach collection="censoHecAnios" index="index" item="item" open="(" separator="," close=")">
-												#{item}       
-											</foreach>
-											)
-										</if>
-											
-										<if test="tpsCenso.length - 1 > indexTpsCenso">
-											OR
-										</if>
-											
-									</foreach>
-								</if>
-									
-								<if test='"padron".equals(itemTpsFuente)'>
-									(tipo = 'padron' 
-									AND año in 
-									<foreach collection="padronAnios" index="index" item="item" open="(" separator="," close=")">
-										#{item}       
-									</foreach>
-									)
-								</if>
-									
-								<if test="tpsFuente.length - 1 > indexTpsFuente">
-									OR
-								</if>
-								-->
 									
 							</foreach>
 			  					
@@ -336,9 +234,7 @@
 				UNION
 			</if>
 							
-		</foreach>
-		
-		<!-- LIMIT #{elementoIni}, #{numTotRegs} -->			
+		</foreach>			
   		
 	</select>
 	

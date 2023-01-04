@@ -11,6 +11,20 @@ public class Role {
 	private Timestamp fhregtro;
 	private String nblogact;
 	private Timestamp fhultact;
+	
+	public Role() {
+	}
+
+	public Role(Integer id, Integer userId, String authority, String nbregtro, Timestamp fhregtro, String nblogact,
+			Timestamp fhultact) {
+		this.id = id;
+		this.userId = userId;
+		this.authority = authority;
+		this.nbregtro = nbregtro;
+		this.fhregtro = fhregtro;
+		this.nblogact = nblogact;
+		this.fhultact = fhultact;
+	}
 
 	public Integer getId() {
 		return id;

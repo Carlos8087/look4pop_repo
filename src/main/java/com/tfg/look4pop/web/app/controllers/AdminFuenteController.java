@@ -86,19 +86,6 @@ public class AdminFuenteController {
 		return "admin/fuentes/eliminar";
 	}
 	
-	// Formulario de consulta
-	/*
-	@GetMapping("/form")
-	public String getFuenteForm(Model model, Locale locale, HttpServletRequest request) {
-		FuenteFormDTO fuenteForm = new FuenteFormDTO();
-		model.addAttribute("fuenteForm", fuenteForm);
-		model.addAttribute("tituloPagina", messageSource.getMessage("text.page.admin.title", null, locale));
-		utilidadesService.activarOpcionMenu(model, 4);
-			
-		return "admin/fuentes/acciones";
-	}
-	*/
-	
 	// Formulario de alta
 	@GetMapping("/alta/form")
 	public String getFuenteAltaForm(Model model, Locale locale, HttpServletRequest request) {
@@ -122,7 +109,6 @@ public class AdminFuenteController {
 	}
 	
 	// Procesamiento formulario de consulta usuario
-	//@PostMapping(path = "/form", params = "alta")
 	@PostMapping("/alta/form")
 	public String procesarAltaFuente(@Valid @ModelAttribute("fuenteForm") FuenteFormDTO fuenteForm, BindingResult result, Model model, Locale locale, HttpServletRequest request, Authentication authentication) {
 						
@@ -183,7 +169,6 @@ public class AdminFuenteController {
 	}
 	
 	// Procesamiento formulario de consulta usuario
-	//@PostMapping(path = "/form", params = "eliminar")
 	@PostMapping("/eliminar/form")
 	public String procesarEliminacionFuente(@Valid @ModelAttribute("fuenteForm") FuenteFormDTO fuenteForm, BindingResult result, Model model, Locale locale, HttpServletRequest request, Authentication authentication) {
 								
@@ -230,13 +215,6 @@ public class AdminFuenteController {
 		LOGGER.info("Fuente eliminada correctamente por " + authentication.getName());		
 		return "admin/fuentes/eliminar";	
 	}
-	
-	/*
-	@RemoteMethod
-	public List<Fuente> getFuenteCensoByTpCensoLst(String tpCenso) {
-		return fuenteService.getFuenteCensoByTpCensoLst(tpCenso);
-	}
-	*/
 	
 	@RemoteMethod
 	public List<Fuente> getFuenteCensoByTipoLst(String tpCenso) {

@@ -6,7 +6,6 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import com.tfg.look4pop.web.app.models.dto.FuenteFormDTO;
-import com.tfg.look4pop.web.app.models.dto.UsuarioFormDTO;
 
 @Component
 public class FuenteFormValidador implements Validator {

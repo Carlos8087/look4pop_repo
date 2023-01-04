@@ -6,12 +6,10 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import com.tfg.look4pop.web.app.models.dto.ConsultaFormDTO;
 import com.tfg.look4pop.web.app.models.dto.ConsultaFormDescripcionDTO;
-import com.tfg.look4pop.web.app.models.dto.PoblacionDataDTO;
 
 @Component
 public class ConsultaFormValidador implements Validator {
@@ -116,68 +114,6 @@ public class ConsultaFormValidador implements Validator {
 			}
 			
 		}
-		
-		/*
-		// Check 'Censo' o check 'Padron' obligatorio
-		if ( (StringUtils.isEmpty(consultaForm.getTpsFuente()))
-				|| (consultaForm.getTpsFuente().length == 0) ) {
-			// nombre del argumento del objeto a validar + mensaje de error
-			errors.rejectValue("tpsFuente", "text.validation.form.error.mandatory.tpsFuente");
-		}
-		
-		// Campo 'Tipo de censo' obligatorio (para tipo de fuente 'Censo')
-		if ( (!StringUtils.isEmpty(consultaForm.getTpsFuente()))
-				&& (consultaForm.getTpsFuente().length > 0) ) {
-				
-			List<String> tpsFuenteLst = Arrays.asList(consultaForm.getTpsFuente());
-			
-			if ( (tpsFuenteLst.contains("censo")) 
-				&& ( (StringUtils.isEmpty(consultaForm.getTpsCenso())) 
-						|| (consultaForm.getTpsCenso().length == 0) ) ) {
-
-				// nombre del argumento del objeto a validar + mensaje de error
-				errors.rejectValue("tpsCenso", "text.validation.form.error.mandatory.tpsCenso");
-			}
-		}
-		
-		// Campo 'Año' obligatorio (para tipo de fuente 'Censo' y según subtipo)
-		if ( (!StringUtils.isEmpty(consultaForm.getTpsCenso()))
-				&& (consultaForm.getTpsCenso().length > 0) ) {
-					
-			List<String> tpsCensoLst = Arrays.asList(consultaForm.getTpsCenso());
-					
-			if ( (tpsCensoLst.contains("derecho")) 
-				&& ( (StringUtils.isEmpty(consultaForm.getCensoDerAnios())) 
-						|| (consultaForm.getCensoDerAnios().length == 0) ) ) {
-
-				// nombre del argumento del objeto a validar + mensaje de error
-				errors.rejectValue("censoDerAnios", "text.validation.form.error.mandatory.censoDerAnios");
-			}
-			
-			if ( (tpsCensoLst.contains("hecho")) 
-				&& ( (StringUtils.isEmpty(consultaForm.getCensoHecAnios())) 
-						|| (consultaForm.getCensoHecAnios().length == 0) ) ) {
-
-				// nombre del argumento del objeto a validar + mensaje de error
-				errors.rejectValue("censoHecAnios", "text.validation.form.error.mandatory.censoHecAnios");
-			}
-		}
-		
-		// Campo 'Año' obligatorio (para tipo de fuente 'Padron')
-		if ( (!StringUtils.isEmpty(consultaForm.getTpsFuente()))
-				&& (consultaForm.getTpsFuente().length > 0) ) {
-						
-			List<String> tpsFuenteLst = Arrays.asList(consultaForm.getTpsFuente());
-					
-			if ( (tpsFuenteLst.contains("padron")) 
-				&& ( (StringUtils.isEmpty(consultaForm.getPadronAnios())) 
-						|| (consultaForm.getPadronAnios().length == 0) ) ) {
-
-				// nombre del argumento del objeto a validar + mensaje de error
-				errors.rejectValue("padronAnios", "text.validation.form.error.mandatory.padronAnios");
-			}
-		}
-		*/
 
 	}
 

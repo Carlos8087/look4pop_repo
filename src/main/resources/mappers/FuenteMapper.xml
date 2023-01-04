@@ -11,7 +11,6 @@
     </resultMap>
 	
 	<!-- Select censo fuentes by tipo de censo -->
-	<!-- <select id="getFuenteCensoByTpCensoLst" parameterType="java.lang.String" resultMap="fuenteMap"> -->
 	<select id="getFuenteCensoByTipoLst" parameterType="java.lang.String" resultMap="fuenteMap">
 		SELECT * 
 		FROM fuente
@@ -20,7 +19,6 @@
 	</select>
 	
 	<!-- Select padron fuentes -->
-	<!-- <select id="getFuentePadronLst" resultType="Fuente"> -->
 	<select id="getFuentePadronLst" resultMap="fuenteMap">
 		SELECT * 
 		FROM fuente

@@ -25,7 +25,7 @@ public class SpringBootLook4popApplication implements CommandLineRunner {
 		
 		String password = "8080";
 		
-		// Encriptado de la contraseña '12345'
+		// Encriptado de la contraseña '8080'
 		for (int i = 0; i < 2; i++) {
 			String bcryptPassword = passwordEncoder.encode(password);
 			System.out.println(bcryptPassword);

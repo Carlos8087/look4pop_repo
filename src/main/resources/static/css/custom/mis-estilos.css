@@ -2,40 +2,21 @@
     background-color: #78a8e2 !important;
     border: 1px solid black;
 }
-/*
-.page-link {
-    color: black !important;
-    border: 1px solid black;
-}
-*/
 
 .page-item .page-link {
 	color: black !important;
     border: 1px solid black;
 }
+
 .page-item.disabled {
 	color: black !important;
 }
-
-
 
 #example {
   table-layout: fixed;
   width: 100% !important;
   border: 1px solid black;
 }
-
-
-/*
-#example td,
-#example th{
-  width: auto !important;
-  white-space: normal;
-}
-*/
-
-
-
 
 .navbar-nav > .active > a { 
     background-color: red; 
@@ -45,11 +26,9 @@
 	background-color: red;
 }
 
-
 .mi-formulario {
   border: 2px solid #012264;
 }
-
 
 .bootstrap-select > .dropdown-toggle,
 .btn-light:not(:disabled):not(.disabled).active, 
@@ -67,16 +46,12 @@
     color: black;
 }
 
-
 .bs-searchbox .form-control {
     margin-bottom: 0;
     width: 100%;
     float: none;
     border: 1px solid black;
 }
-
-
-
 
 .bootstrap-select > .dropdown-toggle:hover {
 	border-width: 1px solid black;
@@ -101,16 +76,12 @@
 	color: black;
 }
 
-
 .modal-header {
 	background-color: #f2f594;
 }
 .modal-body {
 	background-color: #fbfcd9;
 }
-
-
-
 
 .dropdown-menu {
 	background-color: #e5e5e5;
@@ -120,7 +91,3 @@
 .dropdown-item:hover {
 	background-color: #fac5c5;
 }
-	
-
-
-
