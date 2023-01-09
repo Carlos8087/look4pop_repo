@@ -55,7 +55,7 @@ public class AdminFuenteController {
 		binder.addValidators(fuenteFormValidador);
 	}
 	
-	// Pagina de 'Acciones sobre los usuarios'
+	// Pagina de 'Acciones sobre las fuentes'
 	@GetMapping("")
 	public String listarAccionesFuentes(Model model, Locale locale) {
 		model.addAttribute("tituloPagina", messageSource.getMessage("text.page.admin.title", null, locale));
@@ -64,7 +64,7 @@ public class AdminFuenteController {
 		return "admin/fuentes/acciones";
 	}
 	
-	// Pagina de 'Acciones sobre los usuarios'
+	// Pagina de 'Acciones sobre las fuentes'
 	@GetMapping("/alta")
 	public String crearFuente(Model model, Locale locale) {
 		FuenteFormDTO fuenteForm = new FuenteFormDTO();
@@ -75,7 +75,7 @@ public class AdminFuenteController {
 		return "admin/fuentes/alta";
 	}
 		
-	// Pagina de 'Acciones sobre los usuarios'
+	// Pagina de 'Acciones sobre las fuentes'
 	@GetMapping("/eliminar")
 	public String eliminarFuente(Model model, Locale locale) {
 		FuenteFormDTO fuenteForm = new FuenteFormDTO();
